@@ -1,0 +1,83 @@
+{
+  "videos": [
+    { "class": 1, "subject": "Mathematics", "link": "https://youtu.be/7KP1KD8SkYg?si=hU_83KTHt2kyuYh5" },
+    { "class": 1, "subject": "English", "link": "https://youtu.be/t2x9PmAyn-w?si=cXIOC2K_dl4BnWhR" },
+    { "class": 1, "subject": "EVS", "link": "https://youtu.be/LKijj9EnkDY?si=0CCaX6K--F7PzkRO" },
+
+    { "class": 2, "subject": "English", "link": "https://youtu.be/vAEawgwmnzY?si=QATjdBKCZBgMY77V" },
+    { "class": 2, "subject": "EVS", "link": "https://youtu.be/cbyAWG2MNVE?si=GFCV4O44I62UhfV9" },
+    { "class": 2, "subject": "Hindi", "link": "https://youtu.be/LQxqoCypiRE?si=qQ6UewXm8QB258D_" },
+
+    { "class": 3, "subject": "Hindi", "link": "https://youtu.be/YoGKq76crgg?si=qv3b6pxbxTmoQWNz" },
+    { "class": 3, "subject": "English", "link": "https://youtu.be/YJ12OePmYos?si=X6A3rKt115JOVjLM" },
+    { "class": 3, "subject": "Mathematics", "link": "https://youtu.be/K5T685mBAh8?si=tJDhMIOore7MCe6f" },
+    { "class": 3, "subject": "EVS", "link": "https://youtu.be/wKkvFq2ZsIo?si=MyjtmnDZWn6xTLND" },
+    { "class": 3, "subject": "General Knowledge", "link": "https://youtu.be/Cf4ZeJtqKWg?si=DeUeLhjjfMaskYtg" },
+
+    { "class": 4, "subject": "Hindi", "link": "https://youtu.be/lAydYIQdeDE?si=f44Stiaw0P558FL-" },
+    { "class": 4, "subject": "English", "link": "https://youtu.be/gNm1d4Ki_qk?si=zy7fudL0C1X63XBF" },
+    { "class": 4, "subject": "Mathematics", "link": "https://youtu.be/0JPLxcI6HVY?si=bhnGAwFnNn_gdRFE" },
+    { "class": 4, "subject": "EVS", "link": "https://youtu.be/jmc5WmKMF2o?si=rH1AfaSV3U8SkXjM" },
+    { "class": 4, "subject": "General Knowledge", "link": "https://www.youtube.com/live/gyKh4TgGhVw?si=l1e955PuLZ-PpcOS" },
+
+    { "class": 5, "subject": "Hindi", "link": "https://youtu.be/RE2Uy0Ohsb0?si=41K7lWI8FyGEtgNy" },
+    { "class": 5, "subject": "English", "link": "https://youtu.be/8eHgm8y_YnE?si=QnrIkIcDMTfGjEDg" },
+    { "class": 5, "subject": "Mathematics", "link": "https://youtu.be/DKanWcCq1B4?si=_YZ3HgGLx1VXXHrN" },
+    { "class": 5, "subject": "EVS", "link": "https://youtu.be/NFFyYPZ7too?si=n1xQt_pkmL4F9hfD" },
+    { "class": 5, "subject": "General Knowledge", "link": "https://youtu.be/qq1WpLyHKkI?si=JikJMvvNRGq6jFgq" },
+
+    { "class": 6, "subject": "Hindi", "link": "https://www.youtube.com/playlist?list=PLVLoWQFkZbhVsHHeeVR8NGIg1fkChKLzd" },
+    { "class": 6, "subject": "English", "link": "https://youtube.com/playlist?list=PLeUpvW8JoSOgg4fSmgGkvyk5nas0W9F6t&si=g3GbSyrVSDSe9Vdx" },
+    { "class": 6, "subject": "Mathematics", "link": "https://youtu.be/n9E35nlfVKs?si=Y_onKq1deqrZAfM3" },
+    { "class": 6, "subject": "Science", "link": "https://youtu.be/WRGGNO2rnqc?si=Wwdsi4wifRfA3gIe" },
+    { "class": 6, "subject": "Social Science", "link": "https://youtube.com/playlist?list=PLrtKTzggq268f5x3_rPLFmdQQVC14lrKL&si=2Sy4ArTzZHTfqgzA" },
+    { "class": 6, "subject": "Sanskrit", "link": "https://youtube.com/playlist?list=PLeUdn394wLGhs-qfAgnff1naOCOQES6sp&si=nk97Vg5GGIhTY5jP" },
+    { "class": 6, "subject": "Computer Science", "link": "https://youtu.be/agaLaSafbwc?si=e2Zh9uVTG949yQwG" },
+
+    { "class": 7, "subject": "Hindi", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhU3N-86dj5h8-K4pQNFuOEB&si=k7R8cC_oOJ3-MbHR" },
+    { "class": 7, "subject": "English", "link": "https://youtube.com/playlist?list=PLeUpvW8JoSOgyOD_V_zndtPdxFyErAT9s&si=bJcnpoY9Ne5SHJQE" },
+    { "class": 7, "subject": "Mathematics", "link": "https://youtube.com/playlist?list=PL5Z-kervz2Ojxw5r21qftrbzIg5Km_faY&si=-XHg6YhKobSkXQ4r" },
+    { "class": 7, "subject": "Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHYBxH0aP7QisgS5ir5IZcS1&si=R4bN4BbyBl5VrkCb" },
+    { "class": 7, "subject": "Social Science", "link": "https://youtube.com/playlist?list=PL6GW05BfqObk6rjLqqwNfwQsw3l6X1Fqq&si=UuxC8zszMc4Av7pB" },
+    { "class": 7, "subject": "Sanskrit", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhXbgR-qYxRjFhF1QhYRGVR7&si=-Dw39Y5PQXyYJbb3" },
+    { "class": 7, "subject": "Computer Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHYBxH0aP7QisgS5ir5IZcS1&si=YevkAoW0pFf9fZnp" },
+
+    { "class": 8, "subject": "Hindi", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhXujyVBP6fgdYvRBny0ptUf&si=XYp4-jg7NY6jCsdU" },
+    { "class": 8, "subject": "English", "link": "https://youtube.com/playlist?list=PLeUpvW8JoSOi-wnAfWCNkLCrLBrgL-wtk&si=PgHZh7t6EoM-0zfw" },
+    { "class": 8, "subject": "Mathematics", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHYfKg6hY3cqK_oqKxVqdhLN&si=ugN9NPvJwKtF8rS2" },
+    { "class": 8, "subject": "Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHaQ5kgSXa3O2Adkp7IWTuwf&si=uzij3HTB_h1Eu9dv" },
+    { "class": 8, "subject": "Social Science", "link": "https://youtube.com/playlist?list=PL6GW05BfqObkJHDfXmU1zNzDmjfDY1r-F&si=ghYPogM2EXHq0uVi" },
+    { "class": 8, "subject": "Sanskrit", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhX7wXqXQ5Fc9Wrrvn-RzCgQ&si=2YoXxL0aZjvkwNA7" },
+    { "class": 8, "subject": "Computer Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHaQ5kgSXa3O2Adkp7IWTuwf&si=wnqsi3BY0U8mLHRn" },
+
+    { "class": 9, "subject": "Hindi", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHbJtdvw_hhOoaV_QbTRlK-j&si=HjX6jso0Q6tKfTwd" },
+    { "class": 9, "subject": "English", "link": "https://youtube.com/playlist?list=PLeUpvW8JoSOiOKpCj6yDphG4Gk_KtX1kF&si=gjCkD0uRJH7PzldU" },
+    { "class": 9, "subject": "Mathematics", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHbLwDYM6Hc9RUw0bBYPcdaL&si=1tXhQJb9ZqjPYtBX" },
+    { "class": 9, "subject": "Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHZp2JupDnDGHNsx2sQhT5kU&si=jgQfF7JS8QBrdVtR" },
+    { "class": 9, "subject": "Social Science", "link": "https://youtube.com/playlist?list=PL6GW05BfqObk0NWAZfC9byN-0o3w3bF9P&si=aTFCC9Qf6bNQ8J9J" },
+    { "class": 9, "subject": "Sanskrit", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhXJGRLceFl2LZ0nBr3xMOr-" },
+    { "class": 9, "subject": "Computer Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHZp2JupDnDGHNsx2sQhT5kU&si=JUnvN3mvRgfLmb4n" },
+
+    { "class": 10, "subject": "Hindi", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHb7vUz5NYMdgSgUN8NHjY7k&si=EbMZVo3OlLmvQ6aK" },
+    { "class": 10, "subject": "English", "link": "https://youtube.com/playlist?list=PLeUpvW8JoSOiYtsfgXzDbTjXQ7IptbI1n&si=yK2eei0_7dMfT6Vy" },
+    { "class": 10, "subject": "Mathematics", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHbLwDYM6Hc9RUw0bBYPcdaL&si=f2WcJhhM6Bpm1lcc" },
+    { "class": 10, "subject": "Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHbq2KfpB5EBx1rTw8_HpR0J&si=3U9WbOcnci6sA3rG" },
+    { "class": 10, "subject": "Social Science", "link": "https://youtube.com/playlist?list=PL6GW05BfqObnBSuzs8Qu2bcfrqKcdqlRt&si=TyjkO7zMiw36Fbnx" },
+    { "class": 10, "subject": "Sanskrit", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhXosjJhkmTgcd_--nSkPglh&si=jQRSIwbN3Kp2HxA7" },
+    { "class": 10, "subject": "Computer Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHbq2KfpB5EBx1rTw8_HpR0J&si=c0E1h9CMQ" },
+
+    { "class": 11, "subject": "Physics", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhUvMoQthwUnrmiG30rVao-f&si=ivLci1djZcA0C4Jr" },
+    { "class": 11, "subject": "Chemistry", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhWn08i1lguFqgIAtmNlcTpo&si=VVleBxdKdbGsnX3Y" },
+    { "class": 11, "subject": "Mathematics", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHZAhv_EuCJHaH--shwkl1dP&si=VXctocg6K" },
+    { "class": 11, "subject": "Biology", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhX1O3LtEPP_w5jV8Yv_hL25&si=d2Rx5nbE" },
+    { "class": 11, "subject": "English", "link": "https://youtube.com/playlist?list=PLeUpvW8JoSOgeZ7l3P0FQ7Q3fJ6hPA1PR&si=RL2hT5XU" },
+    { "class": 11, "subject": "Computer Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHb_8xDzwNRPS9FUsaVU0b4i&si=F9ljxUPI" },
+
+    { "class": 12, "subject": "Physics", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhW8Xy3EpR2LM1xGcrd-QbY-&si=2r6Lwn3e" },
+    { "class": 12, "subject": "Chemistry", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhWgXkHS6g1IhSbz6aqfskDk&si=_-3m0g4n" },
+    { "class": 12, "subject": "Mathematics", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHZAhv_EuCJHaH--shwkl1dP&si=VXctocg6K" },
+    { "class": 12, "subject": "Biology", "link": "https://youtube.com/playlist?list=PLVLoWQFkZbhXkYcXnvC4Qpp6Vh3BqAhHp&si=9tBepS2" },
+    { "class": 12, "subject": "English", "link": "https://youtube.com/playlist?list=PLeUpvW8JoSOgeZ7l3P0FQ7Q3fJ6hPA1PR&si=RL2hT5XU" },
+    { "class": 12, "subject": "Computer Science", "link": "https://youtube.com/playlist?list=PLVuBdti0JBHb_8xDzwNRPS9FUsaVU0b4i&si=F9ljxUPI" }
+  ]
+}

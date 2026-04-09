@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShikshaSarathi • Intro</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            brand: '#111827',
+            accent: '#0077ff',
+            ink: '#0b0e14'
+          },
+          boxShadow: {
+            neon: "0 0 0 4px rgba(0,119,255,.12), 0 12px 40px rgba(0,0,0,.30)",
+            glass: "0 10px 40px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.15)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Early theme: prevents flash -->
+  <script>
+    (() => {
+      try {
+        const stored = localStorage.getItem('theme');
+        const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && prefersDark)) {
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('theme','dark');
+        } else if (stored === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          localStorage.setItem('theme','light');
+        }
+      } catch {}
+    })();
+  </script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* Background system (CSS variables so dark-mode is instant) */
+    :root{
+      --bg-grad: linear-gradient(180deg,#f5f6fa 0%,#e8ecf7 100%);
+      --mesh: radial-gradient(1200px 600px at 50% -10%, rgba(0,119,255,.16), transparent 60%);
+      --ink: #0b0e14;
+      --watermark: rgba(0,0,0,.035);
+      --blobA: rgba(0,119,255,.35);
+      --blobB: rgba(99,102,241,.35);
+    }
+    .dark:root{
+      --bg-grad: linear-gradient(180deg,#070a12 0%,#0b0e14 100%);
+      --mesh: radial-gradient(1200px 600px at 50% -10%, rgba(0,119,255,.20), transparent 60%);
+      --watermark: rgba(255,255,255,.05);
+      --blobA: rgba(0,119,255,.40);
+      --blobB: rgba(168,85,247,.38);
+    }
+    html, body{height:100%}
+    body{
+      background: var(--bg-grad), var(--mesh);
+    }
+
+    /* Glow blobs */
+    .blob{
+      position:absolute; filter: blur(42px); mix-blend-mode: screen; will-change: transform;
+      animation: float 14s ease-in-out infinite alternate;
+      pointer-events:none; /* ensure no click blocking */
+    }
+    @keyframes float{
+      from{ transform: translate3d(0,0,0) scale(1) }
+      to  { transform: translate3d(24px,-40px,0) scale(1.06) }
+    }
+    .blob2{ animation-delay:.6s }
+
+    /* Elegant gradient title shimmer */
+    .gradient-title{
+      background: linear-gradient(90deg,#ffffff,#9cc3ff,#ffffff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-size: 200% 100%;
+      animation: shimmer 8s ease-in-out infinite;
+    }
+    .dark .gradient-title{
+      background: linear-gradient(90deg,#e9f2ff,#7fb4ff,#e9f2ff);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    @keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+    /* Frosted panels */
+    .glass{
+      backdrop-filter: blur(12px);
+      background: rgba(255,255,255,.72);
+      box-shadow: var(--tw-shadow), inset 0 1px 0 rgba(255,255,255,.18);
+    }
+    .dark .glass{
+      background: rgba(17,24,39,.66);
+      box-shadow: var(--tw-shadow), inset 0 1px 0 rgba(255,255,255,.075);
+    }
+
+    /* Section reveals */
+    .reveal{opacity:0; transform: translateY(22px); transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1)}
+    .reveal.visible{opacity:1; transform: translateY(0)}
+
+    /* Huge watermark */
+    .watermark{
+      position:fixed; inset:auto 0 7% 0; pointer-events:none; text-align:center;
+      font: 700 clamp(42px,9.5vw,120px) 'Playfair Display',serif;
+      letter-spacing:.05em; color: var(--watermark);
+      text-shadow: 0 0 60px rgba(0,119,255,.16);
+    }
+
+    /* Canvas starfield sits behind all */
+    #stars{ position:fixed; inset:0; z-index:-1; opacity:.6; pointer-events:none; }
+    .dark #stars{ opacity:.75; }
+
+    /* HERO reflective glass floor */
+    .hero-wrap{
+      position: relative;
+      isolation: isolate;
+    }
+    .hero-reflect{
+      position: relative;
+      padding-bottom: 64px; /* space for floor */
+    }
+    .hero-reflect::after{
+      content:"";
+      position:absolute; left:50%; transform:translateX(-50%);
+      bottom: 0;
+      width:min(1200px,92vw);
+      height: 140px;
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,.35), rgba(255,255,255,0)) ,
+        radial-gradient(1200px 200px at 50% 0, rgba(0,119,255,.18), transparent 60%);
+      filter: blur(10px);
+      border-radius: 60px 60px 0 0;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.35),
+        0 8px 40px rgba(0,0,0,.18);
+      opacity:.8;
+      pointer-events:none;
+    }
+    .dark .hero-reflect::after{
+      background:
+        linear-gradient(to bottom, rgba(255,255,255,.08), rgba(255,255,255,0)) ,
+        radial-gradient(1200px 200px at 50% 0, rgba(0,119,255,.28), transparent 60%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        0 18px 60px rgba(0,0,0,.55);
+    }
+
+    /* Accessibility: reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      .blob, .gradient-title{ animation: none !important }
+      .reveal{ opacity:1; transform:none }
+    }
+  </style>
+</head>
+
+<body class="text-brand dark:text-white font-sans antialiased min-h-screen selection:bg-accent/20 selection:text-accent">
+  <!-- Decorative starfield -->
+  <canvas id="stars" aria-hidden="true"></canvas>
+
+  <!-- Glow blobs -->
+  <div class="blob w-72 h-72 rounded-full" style="background:var(--blobA); top:8%; left:6%"></div>
+  <div class="blob blob2 w-80 h-80 rounded-full" style="background:var(--blobB); right:8%; bottom:10%"></div>
+
+  <!-- Watermark -->
+  <div class="watermark">ShikshaSarathi</div>
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-40 bg-white/70 dark:bg-ink/60 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="font-display tracking-[0.22em]">SHIKSHASARATHI</div>
+      <nav class="hidden md:block" aria-label="Primary">
+        <ul class="flex items-center gap-6 text-sm">
+          <li><a href="#about" class="hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/40 rounded">About</a></li>
+          <li><a href="#features" class="hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/40 rounded">Features</a></li>
+          <li><a href="#how" class="hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/40 rounded">How it works</a></li>
+          <li><a href="#impact" class="hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/40 rounded">Impact</a></li>
+          <li><a href="#team" class="hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/40 rounded">Team</a></li>
+          <li><a href="#contact" class="hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent/40 rounded">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 rounded-full border border-accent text-accent text-sm hover:bg-accent hover:text-white transition focus:outline-none focus:ring-2 focus:ring-accent/40">Log In</a>
+        <a href="register.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90 transition focus:outline-none focus:ring-2 focus:ring-accent/40">Sign Up</a>
+        <button id="themeToggle" class="w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/40" aria-label="Toggle theme" title="Toggle theme (T)">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO with reflective floor -->
+  <section class="hero-wrap relative">
+    <div class="hero-reflect max-w-6xl mx-auto px-6 py-16 md:py-24 text-center">
+      <p class="uppercase tracking-[0.3em] text-xs md:text-sm text-black/50 dark:text-white/60 mb-3">Welcome to</p>
+      <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold gradient-title">ShikshaSarathi</h1>
+
+      <div class="mt-5 text-base md:text-lg">
+        <span id="typed" class="text-black/70 dark:text-white/70">
+          Because education should speak every child’s language — and listen too.
+        </span>
+        <noscript>
+          <p class="text-black/70 dark:text-white/70">Because education should speak every child’s language — and listen too.</p>
+        </noscript>
+      </div>
+
+      <p class="mt-6 text-sm text-black/60 dark:text-white/60">
+        From Bihar’s villages to India’s classrooms — learning without walls.
+      </p>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="max-w-5xl mx-auto px-6 py-10 md:py-16">
+    <div class="glass rounded-3xl p-8 md:p-10 border border-black/5 dark:border-white/10 reveal shadow-glass">
+      <h2 class="font-display text-2xl md:text-3xl mb-3">We don’t build apps. We build dignity.</h2>
+      <p class="text-black/70 dark:text-white/70 leading-8">
+        ShikshaSarathi began with a simple belief: education is not a privilege. It’s a right —
+        one that should never be blocked by disability, language, or bandwidth.
+        <br><span class="italic opacity-80">Accessibility is not an add-on. It’s the foundation.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features" class="max-w-6xl mx-auto px-6 py-10 md:py-16">
+    <h3 class="font-display text-2xl md:text-3xl mb-6 text-center">Features</h3>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Voice-First -->
+      <article class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal shadow-glass focus-within:ring-2 focus-within:ring-accent/30">
+        <div class="flex items-center gap-3 mb-2">
+          <svg width="28" height="28" viewBox="0 0 24 24" class="text-accent" aria-hidden="true"><path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z"/><path fill="currentColor" d="M5 11a1 1 0 1 0-2 0 9 9 0 0 0 8 8v3h2v-3a9 9 0 0 0 8-8 1 1 0 1 0-2 0 7 7 0 0 1-14 0z"/></svg>
+          <div class="font-semibold">Voice-First Learning</div>
+        </div>
+        <p class="text-black/70 dark:text-white/70">Close your eyes, open your ears — learning just found its voice.</p>
+      </article>
+
+      <!-- Sign Language -->
+      <article class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal shadow-glass">
+        <div class="flex items-center gap-3 mb-2">
+          <svg width="28" height="28" viewBox="0 0 24 24" class="text-accent" aria-hidden="true"><path fill="currentColor" d="M9.5 11L7 8.5L8.5 7l3 3 4-4L17 8l-4.5 4.5L9.5 11zM3 20v-2l5-5 3 3-5 4H3z"/></svg>
+          <div class="font-semibold">Sign Language Recognition</div>
+        </div>
+        <p class="text-black/70 dark:text-white/70">Hands speak. We listen. Inclusion begins with gestures.</p>
+      </article>
+
+      <!-- Dyslexia UI -->
+      <article class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal shadow-glass">
+        <div class="flex items-center gap-3 mb-2">
+          <svg width="28" height="28" viewBox="0 0 24 24" class="text-accent" aria-hidden="true"><path fill="currentColor" d="M4 5h16v2H4zm0 6h10v2H4zm0 6h16v2H4z"/></svg>
+          <div class="font-semibold">Dyslexia-Friendly UI</div>
+        </div>
+        <p class="text-black/70 dark:text-white/70">Fonts that hug the eyes. Words that finally feel friendly.</p>
+      </article>
+
+      <!-- Regional -->
+      <article class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal shadow-glass">
+        <div class="flex items-center gap-3 mb-2">
+          <svg width="28" height="28" viewBox="0 0 24 24" class="text-accent" aria-hidden="true"><path fill="currentColor" d="M12 3l4 4H8l4-4zm0 18l-4-4h8l-4 4zM3 12l4-4v8l-4-4zm18 0l-4 4V8l4 4z"/></svg>
+          <div class="font-semibold">Regional Language Simplification</div>
+        </div>
+        <p class="text-black/70 dark:text-white/70">Hindi. Bhojpuri. English. Because learning should sound like home.</p>
+      </article>
+
+      <!-- AI Bot -->
+      <article class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal shadow-glass">
+        <div class="flex items-center gap-3 mb-2">
+          <svg width="28" height="28" viewBox="0 0 24 24" class="text-accent" aria-hidden="true"><path fill="currentColor" d="M12 2a5 5 0 0 1 5 5v2h1a2 2 0 0 1 2 2v5a4 4 0 0 1-4 4h-1v2h-2v-2H11v2H9v-2H8a4 4 0 0 1-4-4v-5a2 2 0 0 1 2-2h1V7a5 5 0 0 1 5-5zM7 9v2h10V9H7z"/></svg>
+          <div class="font-semibold">AI Voicebot Assistant</div>
+        </div>
+        <p class="text-black/70 dark:text-white/70">A buddy that never sleeps. Ask, doubt, learn — anytime.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="max-w-5xl mx-auto px-6 py-10 md:py-16">
+    <h3 class="font-display text-2xl md:text-3xl mb-6 text-center">Smart. Simple. Human.</h3>
+    <ol class="space-y-4">
+      <li class="glass rounded-2xl p-5 border border-black/5 dark:border-white/10 reveal"><b>1.</b> You speak. Or sign. Or tap.</li>
+      <li class="glass rounded-2xl p-5 border border-black/5 dark:border-white/10 reveal"><b>2.</b> We listen. And understand.</li>
+      <li class="glass rounded-2xl p-5 border border-black/5 dark:border-white/10 reveal"><b>3.</b> Content bends itself to your style.</li>
+      <li class="glass rounded-2xl p-5 border border-black/5 dark:border-white/10 reveal"><b>4.</b> You learn, at your pace, with your voice.</li>
+    </ol>
+  </section>
+
+  <!-- IMPACT -->
+  <section id="impact" class="max-w-6xl mx-auto px-6 py-10 md:py-16">
+    <h3 class="font-display text-2xl md:text-3xl mb-6 text-center">From silence to stories. From struggle to strength.</h3>
+    <div class="grid sm:grid-cols-3 gap-6">
+      <div class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 text-center reveal">
+        <div class="text-4xl font-bold" data-counter="50000">0</div>
+        <div class="mt-2 text-black/70 dark:text-white/70">differently-abled learners empowered</div>
+      </div>
+      <div class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 text-center reveal">
+        <div class="text-4xl font-bold" data-counter="250">0</div>
+        <div class="mt-2 text-black/70 dark:text-white/70">schools & NGOs joined</div>
+      </div>
+      <div class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 text-center reveal">
+        <div class="text-4xl font-bold">Works on</div>
+        <div class="mt-1 text-black/70 dark:text-white/70">the simplest phones</div>
+      </div>
+    </div>
+    <p class="text-center text-black/60 dark:text-white/60 mt-6">
+      Tomorrow, our classrooms will have Braille printers, emotion-sensitive AI, and teachers trained for true inclusion. Today, we take the first bold step.
+    </p>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team" class="max-w-6xl mx-auto px-6 py-10 md:py-16">
+    <h3 class="font-display text-2xl md:text-3xl mb-6 text-center">The Team Hyperparameters.</h3>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Member 1 -->
+      <div class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal flex flex-col items-center text-center">
+        <img src="assets/mainak.jpeg" alt="Mainak Pal"
+             class="w-28 h-28 rounded-full object-cover shadow-lg mb-4 hover:scale-105 transition"/>
+        <div class="font-semibold">Mainak Pal</div>
+        <div class="text-black/70 dark:text-white/70 mb-3">Dreams in Voice Commands</div>
+        <div class="flex gap-4">
+          <!-- LinkedIn (valid SVG) -->
+          <a href="https://www.linkedin.com/in/mainak-pal-abcdefg"
+             target="_blank" rel="noopener" aria-label="Mainak Pal on LinkedIn"
+             class="hover:scale-110 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-6 h-6 text-blue-600 fill-current">
+              <path d="M100.28 448H7.4V148.9h92.88zM53.84 108.1C24.1 108.1 0 83.5 0 53.9 0 24.2 24.6 0 54.7 0s53.8 24.2 53.8 53.9c0 29.6-24.1 54.2-54.66 54.2zM447.9 448h-92.4V302.4c0-34.7-.7-79.3-48.3-79.3-48.4 0-55.8 37.8-55.8 76.8V448h-92.5V148.9H251v40.8h1.3c13.9-26.3 47.8-54 98.4-54 105.3 0 124.7 69.3 124.7 159.3z"/>
+            </svg>
+          </a>
+          <!-- GitHub (placeholder username—replace) -->
+          <a href="https://github.com/mainakpal4"
+             target="_blank" rel="noopener" aria-label="Mainak Pal on GitHub"
+             class="hover:scale-110 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="w-6 h-6 text-gray-800 dark:text-white fill-current">
+              <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zM244 8C106 8 0 114.6 0 253.2 0 366.4 73.3 463 175 497c12.8 2.4 17.5-5.6 17.5-12.4 0-6.1-.2-26.3-.3-47.7-71.2 15.7-86.2-30.7-86.2-30.7-11.7-29.8-28.5-37.7-28.5-37.7-23.3-16 1.8-15.7 1.8-15.7 25.7 1.8 39.2 26.4 39.2 26.4 22.9 39.4 60.1 28 74.8 21.4 2.3-16.8 8.9-28.1 16.2-34.6-56.8-6.6-116.5-28.9-116.5-128.6 0-28.4 10.1-51.6 26.7-69.8-2.6-6.6-11.6-33.2 2.5-69.1 0 0 21.8-7 71.6 26.7 20.8-5.9 43-8.8 65.1-8.9 22.1.1 44.3 3 65.1 8.9 49.7-33.7 71.5-26.7 71.5-26.7 14.2 35.9 5.2 62.5 2.6 69.1 16.6 18.2 26.6 41.4 26.6 69.8 0 99.9-59.8 121.8-116.8 128.3 9.1 7.9 17.3 23.4 17.3 47.2 0 34.1-.3 61.6-.3 70 0 6.9 4.6 14.9 17.6 12.4C422.7 463 496 366.3 496 253.2 496 114.6 388.9 8 244 8z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Member 2 -->
+      <div class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal flex flex-col items-center text-center">
+        <img src="assets/arka.jpeg" alt="Arka Chakraborty"
+             class="w-28 h-28 rounded-full object-cover shadow-lg mb-4 hover:scale-105 transition"/>
+        <div class="font-semibold">Arka Chakraborty</div>
+        <div class="text-black/70 dark:text-white/70 mb-3">Writes Code That Listens</div>
+        <div class="flex gap-4">
+          <a href="https://www.linkedin.com/in/arka-chakraborty-a09743271"
+             target="_blank" rel="noopener" aria-label="Arka Chakraborty on LinkedIn"
+             class="hover:scale-110 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-6 h-6 text-blue-600 fill-current">
+              <path d="M100.28 448H7.4V148.9h92.88zM53.84 108.1C24.1 108.1 0 83.5 0 53.9 0 24.2 24.6 0 54.7 0s53.8 24.2 53.8 53.9c0 29.6-24.1 54.2-54.66 54.2zM447.9 448h-92.4V302.4c0-34.7-.7-79.3-48.3-79.3-48.4 0-55.8 37.8-55.8 76.8V448h-92.5V148.9H251v40.8h1.3c13.9-26.3 47.8-54 98.4-54 105.3 0 124.7 69.3 124.7 159.3z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/ArkaTECHGUY108"
+             target="_blank" rel="noopener" aria-label="Arka Chakraborty on GitHub"
+             class="hover:scale-110 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="w-6 h-6 text-gray-800 dark:text-white fill-current">
+              <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zM244 8C106 8 0 114.6 0 253.2 0 366.4 73.3 463 175 497c12.8 2.4 17.5-5.6 17.5-12.4 0-6.1-.2-26.3-.3-47.7-71.2 15.7-86.2-30.7-86.2-30.7-11.7-29.8-28.5-37.7-28.5-37.7-23.3-16 1.8-15.7 1.8-15.7 25.7 1.8 39.2 26.4 39.2 26.4 22.9 39.4 60.1 28 74.8 21.4 2.3-16.8 8.9-28.1 16.2-34.6-56.8-6.6-116.5-28.9-116.5-128.6 0-28.4 10.1-51.6 26.7-69.8-2.6-6.6-11.6-33.2 2.5-69.1 0 0 21.8-7 71.6 26.7 20.8-5.9 43-8.8 65.1-8.9 22.1.1 44.3 3 65.1 8.9 49.7-33.7 71.5-26.7 71.5-26.7 14.2 35.9 5.2 62.5 2.6 69.1 16.6 18.2 26.6 41.4 26.6 69.8 0 99.9-59.8 121.8-116.8 128.3 9.1 7.9 17.3 23.4 17.3 47.2 0 34.1-.3 61.6-.3 70 0 6.9 4.6 14.9 17.6 12.4C422.7 463 496 366.3 496 253.2 496 114.6 388.9 8 244 8z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Member 3 -->
+      <div class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal flex flex-col items-center text-center">
+        <img src="assets/ayisharya.jpeg" alt="Ayisharya Mitra"
+             class="w-28 h-28 rounded-full object-cover shadow-lg mb-4 hover:scale-105 transition"/>
+        <div class="font-semibold">Ayisharya Mitra</div>
+        <div class="text-black/70 dark:text-white/70 mb-3">Turns Barriers Into Bridges</div>
+        <div class="flex gap-4">
+          <a href="https://www.linkedin.com/in/ayisharya-mitra-8143ba311"
+             target="_blank" rel="noopener" aria-label="Ayisharya Mitra on LinkedIn"
+             class="hover:scale-110 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-6 h-6 text-blue-600 fill-current">
+              <path d="M100.28 448H7.4V148.9h92.88zM53.84 108.1C24.1 108.1 0 83.5 0 53.9 0 24.2 24.6 0 54.7 0s53.8 24.2 53.8 53.9c0 29.6-24.1 54.2-54.66 54.2zM447.9 448h-92.4V302.4c0-34.7-.7-79.3-48.3-79.3-48.4 0-55.8 37.8-55.8 76.8V448h-92.5V148.9H251v40.8h1.3c13.9-26.3 47.8-54 98.4-54 105.3 0 124.7 69.3 124.7 159.3z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/Ayisharya"
+             target="_blank" rel="noopener" aria-label="Ayisharya Mitra on GitHub"
+             class="hover:scale-110 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="w-6 h-6 text-gray-800 dark:text-white fill-current">
+              <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zM244 8C106 8 0 114.6 0 253.2 0 366.4 73.3 463 175 497c12.8 2.4 17.5-5.6 17.5-12.4 0-6.1-.2-26.3-.3-47.7-71.2 15.7-86.2-30.7-86.2-30.7-11.7-29.8-28.5-37.7-28.5-37.7-23.3-16 1.8-15.7 1.8-15.7 25.7 1.8 39.2 26.4 39.2 26.4 22.9 39.4 60.1 28 74.8 21.4 2.3-16.8 8.9-28.1 16.2-34.6-56.8-6.6-116.5-28.9-116.5-128.6 0-28.4 10.1-51.6 26.7-69.8-2.6-6.6-11.6-33.2 2.5-69.1 0 0 21.8-7 71.6 26.7 20.8-5.9 43-8.8 65.1-8.9 22.1.1 44.3 3 65.1 8.9 49.7-33.7 71.5-26.7 71.5-26.7 14.2 35.9 5.2 62.5 2.6 69.1 16.6 18.2 26.6 41.4 26.6 69.8 0 99.9-59.8 121.8-116.8 128.3 9.1 7.9 17.3 23.4 17.3 47.2 0 34.1-.3 61.6-.3 70 0 6.9 4.6 14.9 17.6 12.4C422.7 463 496 366.3 496 253.2 496 114.6 388.9 8 244 8z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Member 4 -->
+      <div class="glass rounded-2xl p-6 border border-black/5 dark:border-white/10 reveal flex flex-col items-center text-center">
+        <img src="assets/aniruddha.jpeg" alt="Aniruddha Bera"
+             class="w-28 h-28 rounded-full object-cover shadow-lg mb-4 hover:scale-105 transition"/>
+        <div class="font-semibold">Aniruddha Bera</div>
+        <div class="text-black/70 dark:text-white/70 mb-3">Teaches AI To Care</div>
+        <div class="flex gap-4">
+          <a href="https://www.linkedin.com/in/aniruddha-bera-31300428b/"
+             target="_blank" rel="noopener" aria-label="Aniruddha Bera on LinkedIn"
+             class="hover:scale-110 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-6 h-6 text-blue-600 fill-current">
+              <path d="M100.28 448H7.4V148.9h92.88zM53.84 108.1C24.1 108.1 0 83.5 0 53.9 0 24.2 24.6 0 54.7 0s53.8 24.2 53.8 53.9c0 29.6-24.1 54.2-54.66 54.2zM447.9 448h-92.4V302.4c0-34.7-.7-79.3-48.3-79.3-48.4 0-55.8 37.8-55.8 76.8V448h-92.5V148.9H251v40.8h1.3c13.9-26.3 47.8-54 98.4-54 105.3 0 124.7 69.3 124.7 159.3z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/Aniruddha543"
+             target="_blank" rel="noopener" aria-label="Aniruddha Bera on GitHub"
+             class="hover:scale-110 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="w-6 h-6 text-gray-800 dark:text-white fill-current">
+              <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zM244 8C106 8 0 114.6 0 253.2 0 366.4 73.3 463 175 497c12.8 2.4 17.5-5.6 17.5-12.4 0-6.1-.2-26.3-.3-47.7-71.2 15.7-86.2-30.7-86.2-30.7-11.7-29.8-28.5-37.7-28.5-37.7-23.3-16 1.8-15.7 1.8-15.7 25.7 1.8 39.2 26.4 39.2 26.4 22.9 39.4 60.1 28 74.8 21.4 2.3-16.8 8.9-28.1 16.2-34.6-56.8-6.6-116.5-28.9-116.5-128.6 0-28.4 10.1-51.6 26.7-69.8-2.6-6.6-11.6-33.2 2.5-69.1 0 0 21.8-7 71.6 26.7 20.8-5.9 43-8.8 65.1-8.9 22.1.1 44.3 3 65.1 8.9 49.7-33.7 71.5-26.7 71.5-26.7 14.2 35.9 5.2 62.5 2.6 69.1 16.6 18.2 26.6 41.4 26.6 69.8 0 99.9-59.8 121.8-116.8 128.3 9.1 7.9 17.3 23.4 17.3 47.2 0 34.1-.3 61.6-.3 70 0 6.9 4.6 14.9 17.6 12.4C422.7 463 496 366.3 496 253.2 496 114.6 388.9 8 244 8z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="max-w-6xl mx-auto px-6 pb-20">
+    <div class="rounded-3xl p-8 md:p-12 bg-gradient-to-br from-accent/90 to-indigo-500 text-white shadow-neon reveal">
+      <h3 class="font-display text-2xl md:text-3xl mb-2">Let’s Build Inclusive Classrooms Together.</h3>
+      <p class="opacity-90 mb-0">Made with ❤️ for every learner — Bihar-first. Bharat-ready.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-ink/60 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">
+      © 2025 ShikshaSarathi • Inclusive Learning Platform
+    </div>
+  </footer>
+
+  <!-- FLOATING CHATBOT -->
+  <button id="botFab"
+    class="fixed bottom-6 right-6 z-[60] w-14 h-14 rounded-full bg-accent text-white shadow-neon grid place-items-center hover:scale-105 transition focus:outline-none focus:ring-2 focus:ring-accent/40"
+    aria-label="Open AI Voicebot" title="Open Voicebot (V)">🎤</button>
+  <div id="botPanel"
+    class="hidden fixed bottom-24 right-6 z-[60] w-[320px] rounded-2xl glass shadow-2xl border border-black/5 dark:border-white/10">
+    <div class="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
+      <div class="font-semibold">AI Voicebot</div>
+      <button id="botClose" class="w-8 h-8 grid place-items-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/30" aria-label="Close">✕</button>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="text-sm text-black/70 dark:text-white/70">Try a quick action:</div>
+      <div class="flex flex-wrap gap-2">
+        <a href="register.html" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">Sign Up</a>
+        <a href="login.html" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">Log In</a>
+        <a href="index.html" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">Explore Home</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts: theme, starfield, typewriter, reveal, counters, bot, shortcuts -->
+  <script>
+    // Theme toggle (click + keyboard "T")
+    const themeToggle = document.getElementById('themeToggle');
+    function toggleTheme(){
+      const dark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    }
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Keyboard shortcuts
+    const botPanel = document.getElementById('botPanel');
+    document.addEventListener('keydown', (e)=>{
+      if (e.key.toLowerCase() === 't') toggleTheme();
+      if (e.key.toLowerCase() === 'v') botPanel.classList.toggle('hidden');
+    });
+
+    // Voicebot popover
+    const botFab = document.getElementById('botFab');
+    const botClose = document.getElementById('botClose');
+    botFab.onclick = ()=> botPanel.classList.toggle('hidden');
+    botClose.onclick = ()=> botPanel.classList.add('hidden');
+
+    // Typewriter (motion-safe)
+    (function typeWriter(){
+      const el = document.getElementById('typed');
+      const full = el.textContent.trim();
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) { el.textContent = full; return; }
+      el.textContent = '';
+      let i = 0;
+      const speed = 24; // chars/sec
+      const step = () => {
+        if (i <= full.length) { el.textContent = full.slice(0, i++); setTimeout(step, 1000/speed); }
+      };
+      step();
+    })();
+
+    // Reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold:.18 });
+    revealEls.forEach(el=>io.observe(el));
+
+    // Stat counters (motion-safe)
+    const counters = document.querySelectorAll('[data-counter]');
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const io2 = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          if(!e.isIntersecting) return;
+          const el = e.target; const target = parseInt(el.dataset.counter, 10);
+          let cur = 0; const dur = 1000; const start = performance.now();
+          function tick(now){
+            const p = Math.min(1, (now - start) / dur);
+            cur = Math.floor(target * (0.15 + 0.85 * p*p));
+            el.textContent = cur.toLocaleString() + (target >= 1000 ? '+' : '');
+            if(p < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+          io2.unobserve(el);
+        });
+      }, { threshold:.4 });
+      counters.forEach(el=>io2.observe(el));
+    } else {
+      counters.forEach(el=>{ el.textContent = Number(el.dataset.counter).toLocaleString() + '+'; });
+    }
+
+    // Tiny starfield (no libs, GPU friendly)
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let W, H, stars;
+    function resize(){
+      W = canvas.width = innerWidth * devicePixelRatio;
+      H = canvas.height = innerHeight * devicePixelRatio;
+      canvas.style.width = innerWidth + 'px';
+      canvas.style.height = innerHeight + 'px';
+      spawn();
+    }
+    function spawn(){
+      const count = Math.min(200, Math.floor((innerWidth * innerHeight)/12000));
+      stars = Array.from({length: count}).map(()=>({
+        x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.8 + .4, s: Math.random()*0.4 + 0.1
+      }));
+    }
+    let t = 0;
+    function loop(){
+      t += 0.002;
+      ctx.clearRect(0,0,W,H);
+      ctx.globalCompositeOperation = 'lighter';
+      for (const st of stars){
+        const y = st.y + Math.sin((st.x*0.0008)+t)*0.6;
+        ctx.beginPath();
+        ctx.arc(st.x, y, st.r, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(140,180,255,.7)';
+        ctx.fill();
+      }
+      requestAnimationFrame(loop);
+    }
+    resize(); loop();
+    addEventListener('resize', resize, { passive:true });
+
+    // Debug clicks in TEAM (optional): uncomment to verify in console
+    // document.querySelectorAll('#team a').forEach(a=>{
+    //   a.addEventListener('click', ()=>console.log('CLICK →', a.href));
+    // });
+  </script>
+</body>
+</html>

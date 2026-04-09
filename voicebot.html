@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Voicebot • Shikshasarathi</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            sans: ['Poppins', 'system-ui', 'sans-serif']
+          },
+          colors: {
+            brand: '#111827',
+            accent: '#0077ff',
+          },
+          boxShadow: {
+            neon: "0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)"
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+
+  <main class="max-w-4xl mx-auto px-6 py-10">
+    <h1 class="font-display text-3xl md:text-4xl mb-6">AI Voicebot</h1>
+    <section class="glass rounded-2xl p-6 shadow-2xl border border-black/5 dark:border-white/10">
+      <p class="text-black/70 dark:text-white/70 mb-4">
+        Try chatting with the AI Voicebot below.
+      </p>
+    </section>
+  </main>
+
+  <!-- Floating Button -->
+  <div id="voicebot-btn" style="position: fixed; bottom: 20px; right: 20px; width: 90px; height: 90px; border-radius: 50%; overflow: hidden; cursor: pointer;">
+    <video autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+      <source src="assets/voicebot.mp4" type="video/mp4" />
+    </video>
+    <span style="position: relative; z-index: 10; color: white; font-weight: bold;">VoiceBot</span>
+  </div>
+
+  <!-- Chat Section -->
+  <section id="chat-section" style="display:none; max-width:700px; margin:40px auto; background:#1e1e2f; color:white; border-radius:16px; min-height:500px; display:flex; flex-direction:column;">
+    <div style="padding:16px;background:#2a2a40;border-radius:16px 16px 0 0;">VoiceBot Assistant</div>
+    <div id="chat-messages" style="flex:1;padding:16px;overflow-y:auto;"></div>
+    <div style="display:flex;padding:10px 16px;gap:10px;background:#2a2a40;">
+      <input id="chat-input" type="text" placeholder="Type a message..." style="flex:1;padding:10px 16px;border-radius:30px;background:#1e1e2f;color:white;border:none;">
+      <button onclick="sendMessage()" style="padding:10px 18px;background:#4a4aff;color:white;border:none;border-radius:30px;">Send</button>
+    </div>
+  </section>
+
+  <script>
+    const voiceBtn = document.getElementById("voicebot-btn");
+    const chatSection = document.getElementById("chat-section");
+    const chatMessages = document.getElementById("chat-messages");
+    const chatInput = document.getElementById("chat-input");
+
+    voiceBtn.onclick = () => { chatSection.style.display="flex"; };
+
+    function botSpeak(text) {
+      let msgDiv = document.createElement("div");
+      msgDiv.style.cssText = "margin:5px 0;padding:10px;border-radius:12px;background:#3a3a55;max-width:75%";
+      msgDiv.innerText = text;
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+    }
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text) return;
+      let userDiv = document.createElement("div");
+      userDiv.style.cssText = "margin:5px 0;padding:10px;border-radius:12px;background:#4a4aff;max-width:75%;margin-left:auto";
+      userDiv.innerText = text;
+      chatMessages.appendChild(userDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      chatInput.value = "";
+
+      fetch("http://127.0.0.1:5001/voicebot/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+      })
+      .then(res => res.json())
+      .then(data => botSpeak(data.reply))
+      .catch(() => botSpeak("⚠️ Connection error."));
+    }
+  </script>
+</body>
+</html>

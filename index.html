@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shikshasarathi</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind CDN config
+    tailwind.config = {
+      darkMode: 'class',              // <-- important for manual dark mode
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+          colors: { brand: "#111827", accent: "#0077ff" },
+          boxShadow: {
+            neon: "0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Early theme boot (prevents flash) -->
+  <script>
+    (function() {
+      try {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) {
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('theme','dark');
+        } else if (saved === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          localStorage.setItem('theme','light');
+        }
+      } catch (_) {}
+    })();
+  </script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+  <style>
+    .gradient-title{
+      background: linear-gradient(90deg,#111,#0077ff,#111);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-size:200% 100%; animation:shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    .glass{backdrop-filter: blur(10px); background: rgba(255,255,255,.6)}
+    .dark .glass{background: rgba(17,24,39,.6)}
+    /* Swiper arrows tweak for better visibility */
+    .swiper-button-next, .swiper-button-prev{
+      color:#fff; width: 46px; height: 46px;
+      background: rgba(0,0,0,.35); border-radius: 9999px;
+      backdrop-filter: blur(4px);
+    }
+    .swiper-button-next:after, .swiper-button-prev:after{font-size: 18px; font-weight: 900;}
+  </style>
+</head>
+
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="font-display tracking-[0.2em] text-xl">SHIKSHASARATHI</div>
+        <nav class="hidden md:block">
+          <ul class="flex items-center gap-6 text-sm font-medium">
+            <li><a href="stt.html" class="hover:text-accent">STT</a></li>
+            <li><a href="tts.html" class="hover:text-accent">TTS</a></li>
+            <li><a href="http://127.0.0.1:5000" class="hover:text-accent">Sign Language</a></li>
+            <li><a href="voicebot.html" class="hover:text-accent">AI Voicebot</a></li>
+            <li><a href="contents.html" class="hover:text-accent">Contents</a></li>
+            <li><a href="classroom.html" class="hover:text-accent">Classroom</a></li>
+            <li><a href="pdf.html" class="hover:text-accent">Pdf-Reader</a></li>
+          </ul>
+        </nav>
+      <!-- <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 rounded-full border border-accent text-accent text-sm hover:bg-accent hover:text-white transition">Log In</a>
+        <a href="register.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90 transition">Sign Up</a>
+        <button id="themeToggle" class="ml-2 w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm" aria-label="Toggle theme">🌓</button>
+      </div> -->
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative">
+    <div class="max-w-5xl mx-auto px-6 py-16 md:py-24 text-center">
+      <p class="uppercase tracking-[0.3em] text-xs md:text-sm text-black/50 dark:text-white/60 mb-2">Welcome to</p>
+      <h1 class="font-display text-4xl md:text-6xl lg:text-7xl font-bold gradient-title">SHIKSHASARATHI</h1>
+      <p class="mt-4 text-base md:text-lg text-black/60 dark:text-white/70">Barrier‑Free Learning for All</p>
+
+      <!-- SLIDESHOW with arrows -->
+      <div class="swiper max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl mt-10 relative">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="assets/img1.jpeg" alt="Slide 1" class="w-full h-auto"></div>
+          <div class="swiper-slide"><img src="assets/img2.jpeg" alt="Slide 2" class="w-full h-auto"></div>
+          <div class="swiper-slide"><img src="assets/img3.png" alt="Slide 3" class="w-full h-auto"></div>
+        </div>
+        <div class="swiper-pagination"></div>
+        <div class="swiper-button-prev" aria-label="Previous slide"></div>
+        <div class="swiper-button-next" aria-label="Next slide"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTIONS -->
+  <main class="max-w-6xl mx-auto px-6 space-y-16 md:space-y-24">
+    <section id="stt" class="glass rounded-3xl p-8 md:p-12 shadow-xl border border-black/5 dark:border-white/10">
+      <h2 class="font-display text-2xl md:text-3xl mb-3">STT (Speech‑to‑Text)</h2>
+      <p class="text-black/70 dark:text-white/70">Convert speech into accurate text in multiple languages with punctuation, diarization, and noise handling.</p>
+    </section>
+
+    <section id="tts" class="glass rounded-3xl p-8 md:p-12 shadow-xl border border-black/5 dark:border-white/10">
+      <h2 class="font-display text-2xl md:text-3xl mb-3">TTS (Text‑to‑Speech)</h2>
+      <p class="text-black/70 dark:text-white/70">Natural voices, speed/pitch controls, and offline caching for low bandwidth regions.</p>
+    </section>
+
+    <section id="sign" class="glass rounded-3xl p-8 md:p-12 shadow-xl border border-black/5 dark:border-white/10">
+      <h2 class="font-display text-2xl md:text-3xl mb-3">Sign Language</h2>
+      <p class="text-black/70 dark:text-white/70">Real‑time ISL/ASL recognition via webcam with animated feedback and practice lessons.</p>
+    </section>
+
+    <section id="voicebot" class="glass rounded-3xl p-8 md:p-12 shadow-xl border border-black/5 dark:border-white/10">
+      <h2 class="font-display text-2xl md:text-3xl mb-3">AI Voicebot</h2>
+      <p class="text-black/70 dark:text-white/70">Floating assistant with microphone access, multilingual understanding, and context memory.</p>
+    </section>
+
+    <section id="contents" class="glass rounded-3xl p-8 md:p-12 shadow-xl border border-black/5 dark:border-white/10">
+      <h2 class="font-display text-2xl md:text-3xl mb-3">Contents</h2>
+      <p class="text-black/70 dark:text-white/70">Curated learning paths, notes, lecture videos, and accessible reading modes.</p>
+    </section>
+  </main>
+
+  <!-- ABOUT -->
+  <section class="max-w-4xl mx-auto px-6 py-16 md:py-24 text-center">
+    <h3 class="font-display text-2xl md:text-3xl mb-4">About Us</h3>
+    <p class="text-black/70 dark:text-white/70 leading-8">
+      Shikshasarathi is an inclusive AI‑powered platform designed to make education accessible for all.
+      We combine Voice Interaction (STT/TTS), Sign Language recognition, multilingual support, and
+      dyslexia‑friendly UIs to ensure no learner is left behind.
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">
+      © 2025 Shikshasarathi • Inclusive Learning Platform
+    </div>
+  </footer>
+
+  <!-- FLOATING AI VOICEBOT -->
+  <button id="botFab"
+    class="fixed bottom-6 right-6 z-[60] w-14 h-14 rounded-full bg-accent text-white shadow-neon grid place-items-center hover:scale-105 transition"
+    aria-label="Open AI Voicebot">
+    <!-- mic icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3z"/>
+      <path d="M5 11a1 1 0 1 0-2 0 9 9 0 0 0 8 8v3h2v-3a9 9 0 0 0 8-8 1 1 0 1 0-2 0 7 7 0 0 1-14 0z"/>
+    </svg>
+  </button>
+
+  <div id="botPanel"
+    class="hidden fixed bottom-24 right-6 z-[60] w-[320px] rounded-2xl glass shadow-2xl border border-black/5 dark:border-white/10">
+    <div class="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
+      <div class="font-semibold">AI Voicebot</div>
+      <button id="botClose" class="w-8 h-8 grid place-items-center rounded-full hover:bg-black/5 dark:hover:bg-white/10" aria-label="Close">✕</button>
+    </div>
+    <div class="p-4 space-y-3">
+      <div class="text-sm text-black/70 dark:text-white/70">Try a quick action:</div>
+      <div class="flex flex-wrap gap-2">
+        <a href="#stt" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg:white/10">Open STT</a>
+        <a href="#tts" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg:white/10">Open TTS</a>
+        <a href="#sign" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg:white/10">Sign Language</a>
+        <a href="#contents" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg:white/10">Contents</a>
+      </div>
+
+      <!-- Simple STT/TTS demo -->
+      <div class="mt-2">
+        <label class="block text-xs mb-1 text-black/60 dark:text-white/60">Text‑to‑Speech</label>
+        <div class="flex gap-2">
+          <input id="ttsText" type="text" placeholder="Type something…"
+                 class="flex-1 px-3 py-2 rounded-lg bg-white/70 dark:bg-white/10 border border-black/10 dark:border-white/10 outline-none">
+          <button id="ttsBtn" class="px-3 py-2 rounded-lg bg-accent text-white text-sm">Speak</button>
+        </div>
+      </div>
+
+      <div class="mt-2">
+        <label class="block text-xs mb-1 text-black/60 dark:text-white/60">Speech‑to‑Text</label>
+        <div class="flex gap-2">
+          <button id="sttBtn" class="px-3 py-2 rounded-lg border border-black/10 dark:border-white/20 text-sm hover:bg-black/5 dark:hover:bg-white/10">🎤 Start</button>
+          <div id="sttOut" class="flex-1 min-h-[40px] px-3 py-2 rounded-lg bg-white/70 dark:bg-white/10 border border-black/10 dark:border-white/10 text-sm"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIBRARIES -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  <!-- INIT -->
+  <script>
+    // Theme toggle button
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    toggle.addEventListener('click', () => {
+      const dark = html.classList.toggle('dark');
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+    });
+
+    // Lenis smooth scroll
+    // // Lenis instant (no laggy delay)
+    // const lenis = new Lenis({
+    //   duration: 0,           // remove easing time
+    //   easing: (t) => t,      // no easing
+    //   smoothWheel: true,     // allow wheel scrolling
+    //   wheelMultiplier: 1.0,  // normal sensitivity
+    //   touchMultiplier: 1.0,
+    //   infinite: false
+    // });
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+
+    // GSAP reveals
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from(".gradient-title", { y: 40, opacity: 0, duration: 1, ease: "power3.out" });
+    gsap.utils.toArray(".glass").forEach((el) => {
+      gsap.from(el, {
+        scrollTrigger: { trigger: el, start: "top 80%" },
+        y: 40, opacity: 0, duration: 0.9, ease: "power2.out"
+      });
+    });
+
+    // Swiper slideshow with arrows + dots
+    const swiper = new Swiper('.swiper', {
+      autoplay: { delay: 3500, disableOnInteraction: false },
+      effect: 'fade', fadeEffect: { crossFade: true },
+      loop: true, speed: 800,
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
+    });
+
+    // Floating Bot: open/close
+    const botFab = document.getElementById('botFab');
+    const botPanel = document.getElementById('botPanel');
+    const botClose = document.getElementById('botClose');
+    botFab.addEventListener('click', () => { botPanel.classList.toggle('hidden'); });
+    botClose.addEventListener('click', () => { botPanel.classList.add('hidden'); });
+
+    // TTS demo (Web Speech API)
+    const ttsBtn = document.getElementById('ttsBtn');
+    const ttsText = document.getElementById('ttsText');
+    ttsBtn.addEventListener('click', () => {
+      try {
+        const utter = new SpeechSynthesisUtterance(ttsText.value || "Hello from Shikshasarathi!");
+        utter.rate = 1; utter.pitch = 1;
+        speechSynthesis.speak(utter);
+      } catch(e) { alert("Text‑to‑Speech not supported in this browser."); }
+    });
+
+    // STT demo (Web Speech API)
+    const sttBtn = document.getElementById('sttBtn');
+    const sttOut = document.getElementById('sttOut');
+    let recognizing = false; let recognition;
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SR(); recognition.lang = 'en-IN'; recognition.continuous = false; recognition.interimResults = true;
+      recognition.onresult = (e) => {
+        let text = ''; for (const res of e.results) text += res[0].transcript + ' ';
+        sttOut.textContent = text.trim();
+      };
+      recognition.onend = () => { recognizing = false; sttBtn.textContent = "🎤 Start"; };
+    }
+    sttBtn.addEventListener('click', () => {
+      if (!recognition) { alert("Speech‑to‑Text not supported in this browser."); return; }
+      if (!recognizing) { recognition.start(); recognizing = true; sttBtn.textContent = "⏹ Stop"; }
+      else { recognition.stop(); recognizing = false; sttBtn.textContent = "🎤 Start"; }
+    });
+  </script>
+</body>
+</html>

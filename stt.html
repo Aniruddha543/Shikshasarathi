@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STT • Shikshasarathi</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode:'class', theme:{ extend:{
+      fontFamily:{ display:['"Playfair Display"','serif'], sans:['Poppins','system-ui','sans-serif'] },
+      colors:{ brand:"#111827", accent:"#0077ff" }, boxShadow:{ neon:"0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)" }
+    }}};
+  </script>
+  <script>(()=>{try{const s=localStorage.getItem('theme');const p=matchMedia('(prefers-color-scheme: dark)').matches; if(s==='dark'||(!s&&p)){document.documentElement.classList.add('dark');localStorage.setItem('theme','dark')}else if(s==='light'){document.documentElement.classList.remove('dark')}else{localStorage.setItem('theme','light')}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>.glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.7)}.dark .glass{background:rgba(17,24,39,.7)}</style>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.2em] text-xl">SHIKSHASARATHI</a>
+      <nav class="hidden md:block">
+        <ul class="flex items-center gap-6 text-sm font-medium">
+          <li><a href="stt.html" class="text-accent">STT</a></li>
+          <li><a href="tts.html" class="hover:text-accent">TTS</a></li>
+          <li><a href="http://127.0.0.1:5000" class="hover:text-accent">Sign Language</a></li>
+          <li><a href="voicebot.html" class="hover:text-accent">AI Voicebot</a></li>
+          <li><a href="contents.html" class="hover:text-accent">Contents</a></li>
+          <li><a href="pdf.html" class="hover:text-accent">Pdf-Reader</a></li>
+        </ul>
+      </nav>
+      <!-- <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 rounded-full border border-accent text-accent text-sm hover:bg-accent hover:text-white transition">Log In</a>
+        <a href="register.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90 transition">Sign Up</a>
+        <button id="themeToggle" class="ml-2 w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm">🌓</button>
+      </div> -->
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="max-w-4xl mx-auto px-6 py-10">
+    <h1 class="font-display text-3xl md:text-4xl mb-6">Speech‑to‑Text (STT)</h1>
+    <section class="glass rounded-2xl p-6 shadow-2xl border border-black/5 dark:border-white/10">
+      <p class="text-black/70 dark:text-white/70 mb-4">Click start and begin speaking. Works best in Chrome.</p>
+      <div class="flex gap-3 mb-4">
+        <button id="startBtn" class="px-4 py-2 rounded-lg bg-accent text-white">🎙️ Start</button>
+        <button id="stopBtn" class="px-4 py-2 rounded-lg border border-black/10 dark:border-white/20">⏹ Stop</button>
+        <select id="lang" class="px-3 py-2 rounded-lg bg-white/70 dark:bg-white/10 border border-black/10 dark:border-white/10">
+          <option value="en-IN">English (India)</option>
+          <option value="hi-IN">Hindi (India)</option>
+          <option value="en-US">English (US)</option>
+        </select>
+      </div>
+      <div id="output" class="min-h-[160px] rounded-xl bg-white/70 dark:bg-white/10 border border-black/10 dark:border-white/10 p-4 leading-7"></div>
+    </section>
+  </main>
+
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">© 2025 Shikshasarathi</div>
+  </footer>
+
+  <script>
+    // Theme toggle
+    document.getElementById('themeToggle').onclick=()=>{const h=document.documentElement;const d=h.classList.toggle('dark');localStorage.setItem('theme',d?'dark':'light')};
+    // STT
+    let rec, active=false;
+    const out = document.getElementById('output');
+    const langSel = document.getElementById('lang');
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      rec = new SR(); rec.continuous=true; rec.interimResults=true; rec.lang=langSel.value;
+      rec.onresult=(e)=>{let t=''; for(const r of e.results){t+=r[0].transcript+' '} out.textContent=t.trim()};
+      rec.onend=()=>{active=false};
+      langSel.onchange=()=>{if(rec){rec.lang=langSel.value}}
+    } else { out.textContent='Speech Recognition not supported in this browser.' }
+    document.getElementById('startBtn').onclick=()=>{ if(rec && !active){rec.start(); active=true} };
+    document.getElementById('stopBtn').onclick =()=>{ if(rec && active){rec.stop()} };
+  </script>
+</body>
+</html>

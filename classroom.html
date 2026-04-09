@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Classroom • Shikshasarathi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            sans: ['Poppins', 'system-ui', 'sans-serif']
+          },
+          colors: { brand:'#111827', accent:'#0077ff' },
+          boxShadow: { neon:"0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)" }
+        }
+      }
+    }
+  </script>
+  <script>
+    (() => {
+      try {
+        const s = localStorage.getItem('theme');
+        const p = matchMedia('(prefers-color-scheme: dark)').matches;
+        if(s==='dark'||(!s&&p)){document.documentElement.classList.add('dark');localStorage.setItem('theme','dark')}
+        else if(s==='light'){document.documentElement.classList.remove('dark')}
+        else{localStorage.setItem('theme','light')}
+      } catch(_) {}
+    })();
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    .glass{backdrop-filter: blur(12px); background: rgba(255,255,255,.7)}
+    .dark .glass{background: rgba(17,24,39,.7)}
+  </style>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.25em]">SHIKSHASARATHI</a>
+      <nav class="hidden md:block">
+        <ul class="flex items-center gap-6 text-sm">
+          <li><a href="http://127.0.0.1:5000" class="hover:text-accent">Sign Language</a></li>
+          <li><a href="dashboard.html" class="hover:text-accent">Dashboard</a></li>
+          <li><a href="contents.html" class="hover:text-accent">Contents</a></li>
+          <li><a href="pdf.html" class="hover:text-accent">Pdf-Reader</a></li>
+        </ul>
+      </nav>
+      <!-- <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 rounded-full border border-accent text-accent text-sm hover:bg-accent hover:text-white">Log In</a>
+        <a href="register.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90">Sign Up</a>
+        <button id="themeToggle" class="w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm">🌓</button>
+      </div> -->
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10 space-y-6">
+    <h1 class="font-display text-3xl md:text-4xl">Classroom</h1>
+
+    <!-- Class Buttons -->
+    <section class="glass rounded-2xl p-4 border border-black/5 dark:border-white/10">
+      <h2 class="font-medium mb-3">Select Class</h2>
+      <div id="classGrid" class="grid grid-cols-2 sm:grid-cols-5 gap-4"></div>
+    </section>
+
+    <!-- Subjects -->
+    <section>
+      <h2 class="font-semibold mb-3">Subjects</h2>
+      <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+  </main>
+
+  <!-- Bot -->
+  <button id="botFab" class="fixed bottom-6 right-6 z-[60] w-14 h-14 rounded-full bg-accent text-white shadow-neon grid place-items-center hover:scale-105 transition">🎤</button>
+  <div id="botPanel" class="hidden fixed bottom-24 right-6 z-[60] w-[320px] rounded-2xl glass shadow-2xl border border-black/5 dark:border-white/10">
+    <div class="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
+      <div class="font-semibold">AI Voicebot</div>
+      <button id="botClose" class="w-8 h-8 grid place-items-center rounded-full hover:bg-black/5 dark:hover:bg-white/10">✕</button>
+    </div>
+    <div class="p-4 space-y-3">
+      <a href="sign-chat.html" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20">Sign Chat</a>
+      <a href="dashboard.html" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20">Dashboard</a>
+    </div>
+  </div>
+
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">© 2025 Shikshasarathi</div>
+  </footer>
+
+<script>
+  // Theme toggle
+  themeToggle.onclick = () => {
+    const d = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('theme', d ? 'dark' : 'light');
+  };
+
+  // Bot panel toggle
+  botFab.onclick = () => botPanel.classList.toggle('hidden');
+  botClose.onclick = () => botPanel.classList.add('hidden');
+
+  // Subjects mapping
+  const SUBJECTS = {
+    "1": ["Mathematics","English","EVS"],
+    "2": ["English","EVS","Hindi"],
+    "3": ["Hindi","English","Mathematics","EVS","General Knowledge"],
+    "4": ["Hindi","English","Mathematics","EVS","General Knowledge"],
+    "5": ["Hindi","English","Mathematics","EVS","General Knowledge"],
+    "6": ["Hindi","English","Mathematics","Science","Social Science","Sanskrit","Computer Science"],
+    "7": ["Hindi","English","Mathematics","Science","Social Science","Sanskrit","Computer Science"],
+    "8": ["Hindi","English","Mathematics","Science","Social Science","Sanskrit","Computer Science"],
+    "9": ["Hindi","English","Mathematics","Physics","Chemistry","Biology","Social Science","Sanskrit","Information Technology"],
+    "10": ["Hindi","English","Mathematics","Physics","Chemistry","Biology","Social Science","Sanskrit","Information Technology"],
+    "11": ["English","Physics","Chemistry","Mathematics","Biology","History","Accoutancy","Business","Economics","Political Science","Geography","Sociology","Psychology"],
+    "12": ["English","Physics","Chemistry","Mathematics","Biology","History","Accoutancy","Business","Economics","Political Science","Geography","Sociology","Psychology"]
+  };
+
+  function getSubjects(cls){ return SUBJECTS[cls] || []; }
+
+  const grid = document.getElementById('grid');
+  const classGrid = document.getElementById('classGrid');
+
+  // Generate class buttons
+  for(let i=1; i<=12; i++){
+    const btn = document.createElement('button');
+    btn.className = "glass rounded-2xl p-2 border border-black/5 dark:border-white/10 shadow-md hover:scale-[1.02] transition flex flex-col items-center";
+    btn.dataset.cls = i;
+
+    const img = document.createElement('img');
+    img.src = `assets/Class${i}.jpeg`;
+    img.alt = `Class ${i}`;
+    img.className = "w-16 h-16 object-cover rounded-md mb-2";
+    btn.appendChild(img);
+
+    const label = document.createElement('span');
+    label.textContent = `Class ${i}`;
+    label.className = "text-sm font-medium";
+    btn.appendChild(label);
+
+    btn.onclick = () => render(i, 'en');
+    classGrid.appendChild(btn);
+  }
+
+  function render(cls, lang){
+    grid.innerHTML='';
+    getSubjects(String(cls)).forEach(sub=>{
+      const card=document.createElement('a');
+      card.href=`subject.html?class=${cls}&subject=${encodeURIComponent(sub)}&lang=${lang}`;
+      card.className='glass rounded-2xl p-5 border border-black/5 dark:border-white/10 shadow-2xl hover:scale-[1.01] transition block';
+      card.innerHTML=`<div class="text-xs uppercase tracking-widest text-black/60 dark:text-white/60">Class ${cls} • English</div>
+                      <div class="mt-1 font-semibold text-lg">${sub}</div>
+                      <div class="mt-2 text-sm text-black/70 dark:text-white/70">Click to view lessons, notes and videos.</div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  // Default render
+  // render(10, 'en');
+</script>
+
+</body>
+</html>

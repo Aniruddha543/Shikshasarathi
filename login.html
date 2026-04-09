@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login • Shikshasarathi</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            sans: ['Poppins', 'system-ui', 'sans-serif'],
+          },
+          colors: { brand: "#111827", accent: "#0077ff" },
+          boxShadow: { neon: "0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)" }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>
+    .glass{backdrop-filter: blur(12px); background: rgba(255,255,255,.7)}
+    .dark .glass{background: rgba(17,24,39,.7)}
+    .gradient-title{
+      background: linear-gradient(90deg,#111,#0077ff,#111);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-size: 200% 100%; animation: shimmer 6s ease-in-out infinite;
+    }
+    @keyframes shimmer{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    input::placeholder { color: rgb(156 163 175); }
+  </style>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.2em] text-xl">SHIKSHASARATHI</a>
+      <nav class="hidden md:block">
+        <ul class="flex items-center gap-6 text-sm font-medium">
+          <li><a href="index.html#stt" class="hover:text-accent">STT</a></li>
+          <li><a href="index.html#tts" class="hover:text-accent">TTS</a></li>
+          <li><a href="index.html#sign" class="hover:text-accent">Sign Language</a></li>
+          <li><a href="index.html#voicebot" class="hover:text-accent">AI Voicebot</a></li>
+          <li><a href="index.html#contents" class="hover:text-accent">Contents</a></li>
+        </ul>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 rounded-full border border-accent text-accent text-sm hover:bg-accent hover:text-white transition">Log In</a>
+        <a href="register.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90 transition">Sign Up</a>
+        <button id="themeToggle" class="ml-2 w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm" aria-label="Toggle theme">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOGIN FORM -->
+  <main class="min-h-[85vh] grid place-items-center px-6 py-10">
+    <section class="glass w-full max-w-xl rounded-3xl shadow-2xl border border-black/5 dark:border-white/10 p-8">
+      <div class="text-center mb-6">
+        <h1 class="font-display text-3xl md:text-4xl font-bold gradient-title">Welcome back</h1>
+        <p class="text-black/60 dark:text-white/70 mt-2 text-sm">Log in to continue your learning journey.</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="block text-sm mb-1 text-black/70 dark:text-white/70">Email</label>
+          <input id="email" type="email" required
+                 class="w-full rounded-xl px-4 py-3 bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10 outline-none focus:ring-2 focus:ring-accent">
+        </div>
+        <div>
+          <label class="block text-sm mb-1 text-black/70 dark:text-white/70">Password</label>
+          <input id="password" type="password" minlength="6" required
+                 class="w-full rounded-xl px-4 py-3 bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10 outline-none focus:ring-2 focus:ring-accent">
+        </div>
+
+        <button type="submit"
+                class="w-full mt-2 rounded-xl bg-accent text-white py-3 font-semibold shadow-neon hover:opacity-90 transition">
+          Log in
+        </button>
+
+        <p class="text-center text-sm text-black/60 dark:text-white/60">
+          New here?
+          <a href="register.html" class="text-accent hover:underline">Create an account</a>
+        </p>
+      </form>
+
+      <!-- Message -->
+      <p id="message" class="mt-4 text-center text-sm"></p>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">
+      © 2025 Shikshasarathi • Inclusive Learning Platform
+    </div>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Import Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+
+    // TODO: Replace with your Firebase project config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAFbOYSeIajkD1K5fep-CDXMD8FBfnJgcY",
+      authDomain: "shiksha-sarathi-4a4c8.firebaseapp.com",
+      projectId: "shiksha-sarathi-4a4c8",
+      storageBucket: "shiksha-sarathi-4a4c8.firebasestorage.app",
+      messagingSenderId: "939995805840",
+      appId: "1:939995805840:web:9605acc4d7e4988debc015",
+      measurementId: "G-8WSNFC0GKC"
+    };
+
+    // Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Theme toggle persisting
+    const toggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    if (!localStorage.getItem('theme')) localStorage.setItem('theme','light');
+    if (localStorage.getItem('theme') === 'dark') html.classList.add('dark');
+    toggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+
+    // Login handler
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const msg = document.getElementById('message');
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        msg.textContent = "✅ Login successful! Redirecting…";
+        msg.className = "mt-4 text-center text-sm text-green-600";
+        setTimeout(() => window.location.href = "index.html", 800);
+      } catch (err) {
+        msg.textContent = "❌ " + err.message;
+        msg.className = "mt-4 text-center text-sm text-red-600";
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lectures • Shikshasarathi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    .glass { backdrop-filter: blur(12px); background: rgba(255,255,255,.7); }
+    .dark .glass { background: rgba(17,24,39,.7); }
+  </style>
+</head>
+<body class="bg-[#f5f6fa] dark:bg-[#0b0e14] text-brand dark:text-white font-sans">
+
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.25em]">SHIKSHASARATHI</a>
+      <a href="classroom.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90">Back to Classes</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10 space-y-6">
+    <h1 id="pageTitle" class="font-display text-3xl md:text-4xl">Lectures</h1>
+    <section id="videosGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+  </main>
+
+<script>
+  // Get URL parameters
+  function getParams() {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      cls: parseInt(params.get('class')),
+      subject: params.get('subject')
+    };
+  }
+
+  const { cls, subject } = getParams();
+  document.getElementById('pageTitle').textContent = `Class ${cls} • ${subject}`;
+
+  // ---------------- VIDEO DATA ----------------
+  const VIDEO_DATA = {
+  "videos": [
+    {"class":1,"subject":"Mathematics","link":"https://youtu.be/7KP1KD8SkYg?si=hU_83KTHt2kyuYh5"},
+    {"class":1,"subject":"English","link":"https://youtu.be/t2x9PmAyn-w?si=cXIOC2K_dl4BnWhR"},
+    {"class":1,"subject":"EVS","link":"https://youtu.be/LKijj9EnkDY?si=0CCaX6K--F7PzkRO"},
+
+    {"class":2,"subject":"English","link":"https://youtu.be/vAEawgwmnzY?si=QATjdBKCZBgMY77V"},
+    {"class":2,"subject":"EVS","link":"https://youtu.be/cbyAWG2MNVE?si=GFCV4O44I62UhfV9"},
+    {"class":2,"subject":"Hindi","link":"https://youtu.be/LQxqoCypiRE?si=qQ6UewXm8QB258D_"},
+
+    {"class":3,"subject":"Hindi","link":"https://youtu.be/YoGKq76crgg?si=qv3b6pxbxTmoQWNz"},
+    {"class":3,"subject":"English","link":"https://youtu.be/YJ12OePmYos?si=X6A3rKt115JOVjLM"},
+    {"class":3,"subject":"Mathematics","link":"https://youtu.be/K5T685mBAh8?si=tJDhMIOore7MCe6f"},
+    {"class":3,"subject":"EVS","link":"https://youtu.be/wKkvFq2ZsIo?si=MyjtmnDZWn6xTLND"},
+    {"class":3,"subject":"General Knowledge","link":"https://youtu.be/Cf4ZeJtqKWg?si=DeUeLhjjfMaskYtg"},
+
+    {"class":4,"subject":"Hindi","link":"https://youtu.be/lAydYIQdeDE?si=f44Stiaw0P558FL-"},
+    {"class":4,"subject":"English","link":"https://youtu.be/gNm1d4Ki_qk?si=zy7fudL0C1X63XBF"},
+    {"class":4,"subject":"Mathematics","link":"https://youtu.be/0JPLxcI6HVY?si=bhnGAwFnNn_gdRFE"},
+    {"class":4,"subject":"EVS","link":"https://youtu.be/jmc5WmKMF2o?si=rH1AfaSV3U8SkXjM"},
+    {"class":4,"subject":"General Knowledge","link":"https://www.youtube.com/live/gyKh4TgGhVw?si=l1e955PuLZ-PpcOS"},
+
+    {"class":5,"subject":"Hindi","link":"https://youtu.be/RE2Uy0Ohsb0?si=41K7lWI8FyGEtgNy"},
+    {"class":5,"subject":"English","link":"https://youtu.be/8eHgm8y_YnE?si=QnrIkIcDMTfGjEDg"},
+    {"class":5,"subject":"Mathematics","link":"https://youtu.be/DKanWcCq1B4?si=_YZ3HgGLx1VXXHrN"},
+    {"class":5,"subject":"EVS","link":"https://youtu.be/NFFyYPZ7too?si=n1xQt_pkmL4F9hfD"},
+    {"class":5,"subject":"General Knowledge","link":"https://youtu.be/qq1WpLyHKkI?si=JikJMvvNRGq6jFgq"},
+
+    {"class":6,"subject":"Hindi","link":"https://www.youtube.com/playlist?list=PLVLoWQFkZbhVsHHeeVR8NGIg1fkChKLzd"},
+    {"class":6,"subject":"English","link":"https://youtube.com/playlist?list=PLeUpvW8JoSOgg4fSmgGkvyk5nas0W9F6t&si=g3GbSyrVSDSe9Vdx"},
+    {"class":6,"subject":"Mathematics","link":"https://youtu.be/n9E35nlfVKs?si=Y_onKq1deqrZAfM3"},
+    {"class":6,"subject":"Science","link":"https://youtu.be/WRGGNO2rnqc?si=Wwdsi4wifRfA3gIe"},
+    {"class":6,"subject":"Social Science","link":"https://youtube.com/playlist?list=PLrtKTzggq268f5x3_rPLFmdQQVC14lrKL&si=2Sy4ArTzZHTfqgzA"},
+    {"class":6,"subject":"Sanskrit","link":"https://youtube.com/playlist?list=PLeUdn394wLGhs-qfAgnff1naOCOQES6sp&si=nk97Vg5GGIhTY5jP"},
+    {"class":6,"subject":"Computer Science","link":"https://youtu.be/agaLaSafbwc?si=e2Zh9uVTG949yQwG"},
+
+    {"class":7,"subject":"Hindi","link":"https://youtube.com/playlist?list=PLeUdn394wLGjgJfEml0IwAcMqjVQT0gzY&si=96FkI15PbZZRHpSY"},
+    {"class":7,"subject":"English","link":"https://youtube.com/playlist?list=PLbYmVaaigaHlbIYgU_tozcivXk0vTEl1P&si=P7CCgHau69Fcc6cc"},
+    {"class":7,"subject":"Mathematics","link":"https://youtube.com/playlist?list=PLF_WTILuzYGiPyeUf_ADi8y92Q2WLw937&si=vcARxS8saGOXOHG5"},
+    {"class":7,"subject":"Science","link":"https://youtube.com/playlist?list=PLz18M0aaL7AMxgkY1eYeuEEk4PHlrCQx_&si=Jws6pDqToa4l_JyQ"},
+    {"class":7,"subject":"Social Science","link":"https://youtube.com/playlist?list=PLz18M0aaL7ANNJaf7TW1lW-F7tX4GE2NR&si=MDTMAw-wrFo6zWi-"},
+    {"class":7,"subject":"Sanskrit","link":"https://youtu.be/zpB7tBHmsxk?si=-PNtZ2P_HMFcgfVd"},
+    {"class":7,"subject":"Computer Science","link":"https://youtu.be/Q-m4mvPmjB0?si=Qtg5PmiUD1nWHFup"},
+
+    {"class":8,"subject":"Hindi","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhW36wcblwQD3ViXkRzQV8Ka&si=Nf2-vLTvdx3zypvV"},
+    {"class":8,"subject":"English","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhWWdPx33Fo55ivvR1K-NyDS&si=m1phhqah8BFieGm5"},
+    {"class":8,"subject":"Mathematics","link":"https://youtube.com/playlist?list=PLcJiYBaxEj81YRp00ZkyO7fb4CYLEZKhw&si=OpK_asT1ENtBM9py"},
+    {"class":8,"subject":"Science","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhV8K8NiJrFoMSwa_34UDMdg&si=9HJQp5CyDH5aJYbQ"},
+    {"class":8,"subject":"Social Science","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhW0rcXsCUWKK3bUAT12T_iV&si=njEb-Bd0wrcgKEBo"},
+    {"class":8,"subject":"Sanskrit","link":"https://youtube.com/playlist?list=PLeUdn394wLGhddvqKCaruV3RCUMB3QARU&si=ivUW-kdfLl2CK9h4"},
+    {"class":8,"subject":"Computer Science","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhXzplDZnAtSfLJuksCHVlXw&si=_s5jc4oZxA1sya3x"},
+
+    {"class":9,"subject":"Hindi","link":"https://youtu.be/sVMpSbrn3VM?si=vagRUFtaotm-2vLy"},
+    {"class":9,"subject":"English","link":"https://youtu.be/OBW7b2X7dJs?si=zNcJThbNvh1vN65-"},
+    {"class":9,"subject":"Mathematics","link":"https://youtu.be/p3LPj6gMuY8?si=r1nCIsRFbDQAM0jf"},
+    {"class":9,"subject":"Physics","link":"https://youtu.be/FWTH8ovrU0w?si=HXPKccH_URIu5-cl"},
+    {"class":9,"subject":"Chemistry","link":"https://youtu.be/Z5ZAY-lW4TU?si=9deGuGtiO74mQ39j"},
+    {"class":9,"subject":"Biology","link":"https://youtu.be/qS7ZATxWByI?si=NeFaPDKgiiVtY07z"},
+    {"class":9,"subject":"Social Science","link":"https://youtu.be/ik3tXVUbiQE?si=f581jdOBVE4tAX3S"},
+    {"class":9,"subject":"Sanskrit","link":"https://youtu.be/y4jAyyDNii0?si=S8ob4HnXpK00T3Ti"},
+    {"class":9,"subject":"Information Technology","link":"https://youtu.be/mASeBPpx52E?si=d98nkVrrQqPKxbBe"},
+
+    {"class":10,"subject":"Hindi","link":"https://youtu.be/YNU-_nU1ZNA?si=MI41FAlvO2fnmTGZ"},
+    {"class":10,"subject":"English","link":"https://youtu.be/Xw6aP3ubJes?si=16XzDi6MaWik_rAG"},
+    {"class":10,"subject":"Mathematics","link":"https://youtu.be/sFP4ZDmEhHc?si=KsEZYzWdgROwXu6l"},
+    {"class":10,"subject":"Physics","link":"https://youtu.be/HzQ_zcAALrk?si=pgeezsiCMugK_XSE"},
+    {"class":10,"subject":"Chemistry","link":"https://youtu.be/HzQ_zcAALrk?si=pgeezsiCMugK_XSE"},
+    {"class":10,"subject":"Biology","link":"https://youtu.be/FjgUBLhVzNU?si=CWOi7vLwZIcnK50Y"},
+    {"class":10,"subject":"Social Science","link":"https://youtu.be/Irp-Hev4_7A?si=bysDfHkoVCZTJdN-"},
+    {"class":10,"subject":"Sanskrit","link":"https://youtu.be/eN3OZ1uCkPo?si=Ileuf_pg_79NmQEQ"},
+    {"class":10,"subject":"Information Technology","link":"https://youtu.be/fFT1Rk4-Whk?si=MfjAPgvZr6OoLe-S"},
+
+    {"class":11,"subject":"English","link":"https://youtu.be/GSgZW6YbSC8?si=XiPqX7CAvoXVshZb"},
+    {"class":11,"subject":"Physics","link":"https://youtu.be/thZ2Fk3oy0A?si=wb-lGAjaV-2-0TJG"},
+    {"class":11,"subject":"Chemistry","link":"https://youtu.be/H0JcXlWD33s?si=u8q7DB98I3t4GiC-"},
+    {"class":11,"subject":"Maths","link":"https://youtu.be/etykWjsMF7s?si=oD0Tl0q-BzLyAjdW"},
+    {"class":11,"subject":"Biology","link":"https://youtu.be/_XwdRy_Ym6c?si=PE9-Q7y6412QIYHq"},
+    {"class":11,"subject":"History","link":"https://youtu.be/keJMpL_qU48?si=p5FJ5w5itP28bWzZ"},
+    {"class":11,"subject":"Accountancy","link":"https://youtu.be/evuHG-xzvoA?si=MOo8MKFhxNVKf7pM"},
+    {"class":11,"subject":"Business","link":"https://youtu.be/ypiklI2RgQA?si=q9jjzxa0N0MkWZrQ"},
+    {"class":11,"subject":"Economics","link":"https://www.youtube.com/live/oaBu8Z-B5Aw?si=F30gda6Vmuu6ejLT"},
+    {"class":11,"subject":"Political Science","link":"https://youtu.be/4tikochfb-c?si=vYsOS7CHGFtRIGzj"},
+    {"class":11,"subject":"Geography","link":"https://youtu.be/WzZUh4FsoV0?si=bqxiePm4gVJVDFca"},
+    {"class":11,"subject":"Sociology","link":"https://youtu.be/KyoYmJGu7Kk?si=OjGOt4FUcfff5m6g"},
+    {"class":11,"subject":"Psychology","link":"https://youtu.be/B6bO1qZt-Bg?si=P0mGp1a7WcYMdwbL"},
+
+    {"class":12,"subject":"English","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhXIjdyAibF3XPKkc1rfttGm&si=PDSkWqGdPdC89XxI"},
+    {"class":12,"subject":"Physics","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhU6U0BhqGieiARjUYmyoa8p&si=gLZiVrClxRkBpRHt"},
+    {"class":12,"subject":"Chemistry","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhVdStvLVoS3kU7RBaJR4JTR&si=yfmvZxHogdLoEYzx"},
+    {"class":12,"subject":"Maths","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhU5r5DlfxPc3gKw-QLLAvLn&si=PE3Pmdm1qssBpJgM"},
+    {"class":12,"subject":"Biology","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhU9wgMK7nJv0eZK4gcaI8FJ&si=7zxdYOYzxfGuJJ7q"},
+    {"class":12,"subject":"History","link":"https://youtube.com/playlist?list=PLwYR7WJw1-QUxjDQllBr9DjreDtehHNiY&si=oBrX2H5AloBC6SVM"},
+    {"class":12,"subject":"Accountancy","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhWtF1CTYtmePxD-MvMW_158&si=rtRSzTW5k3KzmUes"},
+    {"class":12,"subject":"Business","link":"https://youtube.com/playlist?list=PLXYXRPexfDroVK452LNOmJknRe1rOueCG&si=Wg4aB471ViE9iW60"},
+    {"class":12,"subject":"Economics","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhVybVpAL5BmINyEOAw1GMGO&si=GcglQLvfnYH-tKBE"},
+    {"class":12,"subject":"Political Science","link":"https://youtube.com/playlist?list=PLIOgrZsg8i75EEvF2RT1OrtzXb2l_8C06&si=_cj38VVnL8pV_qo3"},
+    {"class":12,"subject":"Geography","link":"https://youtube.com/playlist?list=PLW5Dusg61U9En5g7PNj4fRBTgzNsFGQs5&si=DDnVSzcSgXXCDsTK"},
+    {"class":12,"subject":"Sociology","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhWIQPule0WqYd31prGXLana&si=7t-_QnNJcnq1Y7mr"},
+    {"class":12,"subject":"Psychology","link":"https://youtube.com/playlist?list=PLVLoWQFkZbhXOGREUvTDsMJIgqBcAxnvn&si=Hg4AjXoIiPpWR2al"}
+  ]
+};
+ // Paste your VIDEO_DATA
+  // ---------------- PDF DATA ----------------
+  const PDF_DATA = {
+    "pdfs": [
+      {"class":1,"subject":"English","files":["aemr101","aemr102","aemr103","aemr104","aemr105","aemr106","aemr107","aemr108","aemr109"]},
+      {"class":1,"subject":"EVS","files":["ahsr101","ahsr102","ahsr103","ahsr104","ahsr105","ahsr106","ahsr107","ahsr108","ahsr109","ahsr110","ahsr111","ahsr112","ahsr113","ahsr114","ahsr115","ahsr116","ahsr117","ahsr118","ahsr119"]},
+      {"class":1,"subject":"Mathematics","files":["aejm101","aejm102","aejm103","aejm104","aejm105","aejm106","aejm107","aejm108","aejm109","aejm110","aejm111","aejm112","aejm113"]},
+      // Add more classes/subjects similarly
+      { "class":2, "subject":"English", "files":["bemr101","bemr102","bemr103","bemr104","bemr105","bemr106","bemr107","bemr108","bemr109","bemr110","bemr111","bemr112","bemr113"] },
+      { "class":2, "subject":"Hindi", "files":["bhsr101","bhsr102","bhsr103","bhsr104","bhsr105","bhsr106","bhsr107","bhsr108","bhsr109","bhsr110","bhsr111","bhsr112","bhsr113","bhsr114","bhsr115","bhsr116","bhsr117","bhsr118","bhsr119","bhsr120","bhsr121","bhsr122","bhsr123","bhsr124","bhsr125","bhsr126"] },
+      { "class":2, "subject":"EVS", "files":["bejm101","bejm102","bejm103","bejm104","bejm105","bejm106","bejm107","bejm108","bejm109","bejm110","bejm111"] },
+
+        { "class":3, "subject":"English", "files":["cesa101","cesa102","cesa103","cesa104","cesa105","cesa106","cesa107","cesa108","cesa109","cesa110","cesa111","cesa112"] },
+        { "class":3, "subject":"EVS", "files":["ceev101","ceev102","ceev103","ceev104","ceev105","ceev106","ceev107","ceev108","ceev109","ceev110","ceev111","ceev112"] },
+        { "class":3, "subject":"Hindi", "files":["chve101","chve102","chve103","chve104","chve105","chve106","chve107","chve108","chve109","chve110","chve111","chve112","chve113","chve114","chve115","chve116","chve117","chve118"] },
+        { "class":3, "subject":"Mathematics", "files":["cemm101","cemm102","cemm103","cemm104","cemm105","cemm106","cemm107","cemm108","cemm109","cemm110","cemm111","cemm112","cemm113","cemm114"] },
+
+        { "class":4, "subject":"English", "files":["desa101","desa102","desa103","desa104","desa105","desa106","desa107","desa108","desa109","desa110","desa111","desa112"] },
+        { "class":4, "subject":"EVS", "files":["deev101","deev102","deev103","deev104","deev105","deev106","deev107","deev108","deev109","deev110"] },
+        { "class":4, "subject":"Mathematics", "files":["demm101","demm102","demm103","demm104","demm105","demm106","demm107","demm108","demm109","demm110","demm111","demm112","demm113","demm114"] },
+
+        { "class":5, "subject":"English", "files":["eeev101","eeev102","eeev103","eeev104","eeev105","eeev106","eeev107","eeev108","eeev109","eeev110"] },
+        { "class":5, "subject":"EVS", "files":["eesa101","eesa102","eesa103","eesa104","eesa105","eesa106","eesa107","eesa108","eesa109","eesa110"] },
+        { "class":5, "subject":"Hindi", "files":["ehve101","ehve102","ehve103","ehve104","ehve105","ehve106","ehve107","ehve108","ehve109","ehve110","ehve111","ehve112"] },
+        { "class":5, "subject":"Mathematics", "files":["eemm101","eemm102","eemm103","eemm104","eemm105","eemm106","eemm107","eemm108","eemm109","eemm110","eemm111","eemm112","eemm113","eemm114","eemm115"] },
+
+        { "class":6, "subject":"English", "files":["fepr101","fepr102","fepr103","fepr104","fepr105"] },
+        { "class":6, "subject":"Hindi", "files":["fhml101","fhml102","fhml103","fhml104","fhml105","fhml106","fhml107","fhml108","fhml109","fhml110","fhml111","fhml112","fhml113"] },
+        { "class":6, "subject":"Mathematics", "files":["fegp101","fegp102","fegp103","fegp104","fegp105","fegp106","fegp107","fegp108","fegp109","fegp110"] },
+
+        { "class":7, "subject":"English", "files":["gepr101","gepr102","gepr103","gepr104","gepr105"] },
+
+        { "class":8, "subject":"English", "files":["hepr101","hepr102","hepr103","hepr104","hepr105"] },
+
+        { "class":9, "subject":"English", "files":["iebe101","iebe102","iebe103","iebe104","iebe105","iebe106","iebe107","iebe108","iebe109"] },
+
+        { "class":10, "subject": "English", "files": ["jeff101","jeff102","jeff103","jeff104","jeff105","jeff106","jeff107","jeff108","jeff109"] },
+
+        { "class": 11, "subject": "English", "files": ["kehb101","kehb102","kehb103","kehb104","kehb105","kehb106","kehb107","kehb108","kehb109"] },
+
+        { "class": 12, "subject": "English", "files": ["lefl101","lefl102","lefl103","lefl104","lefl105","lefl106","lefl107","lefl108","lefl109","lefl110","lefl111","lefl112","lefl113","lefl114","lefl115"] }
+
+    ]
+  };
+
+  const videosGrid = document.getElementById('videosGrid');
+
+  // Convert any YouTube URL to embed URL
+  function getEmbedLink(url) {
+    try {
+      if (url.includes("list=")) {
+        const params = new URLSearchParams(url.split("?")[1]);
+        return `https://www.youtube.com/embed/videoseries?list=${params.get("list")}`;
+      }
+      if (url.includes("youtu.be/")) {
+        const id = url.split("/").pop().split("?")[0];
+        return `https://www.youtube.com/embed/${id}`;
+      }
+      if (url.includes("youtube.com/watch")) {
+        const params = new URLSearchParams(url.split("?")[1]);
+        return `https://www.youtube.com/embed/${params.get("v")}`;
+      }
+      return url; 
+    } catch (e) {
+      console.error("Invalid URL:", url);
+      return "";
+    }
+  }
+
+  // Filter videos for selected class & subject
+  const lectures = VIDEO_DATA.videos.filter(v => v.class === cls && v.subject === subject);
+  const pdfs = PDF_DATA.pdfs.find(p => p.class === cls && p.subject === subject);
+
+  if (lectures.length === 0 && !pdfs) {
+    videosGrid.innerHTML = `<div class="glass p-5 rounded-2xl text-center">No content available for this subject yet.</div>`;
+  } else {
+    // Render videos
+    lectures.forEach((video, index) => {
+      const ytLink = getEmbedLink(video.link);
+      const card = document.createElement('div');
+      card.className = "glass rounded-2xl p-3 border border-black/5 dark:border-white/10 shadow-md";
+      card.innerHTML = `
+        <iframe class="w-full h-48 sm:h-56 md:h-64 rounded-md" src="${ytLink}" title="Lecture ${index+1}" frameborder="0" allowfullscreen></iframe>
+        <div class="mt-2 font-medium">Lecture ${index+1}</div>
+      `;
+      videosGrid.appendChild(card);
+    });
+
+    // Render PDFs
+    if (pdfs) {
+      pdfs.files.forEach((file, idx) => {
+        const card = document.createElement('div');
+        card.className = "glass rounded-2xl p-5 border border-black/5 dark:border-white/10 shadow-md flex flex-col items-center";
+        card.innerHTML = `
+          <img src="assets/pdf-icon.png" alt="PDF Icon" class="w-12 h-12 mb-3"/>
+          <div class="font-medium mb-2">PDF ${idx+1}</div>
+          <a href="assets/pdf/class${cls}/${subject.toLowerCase()}/${file}.pdf" target="_blank" class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700">Open PDF</a>
+        `;
+        videosGrid.appendChild(card);
+      });
+    }
+  }
+</script>
+
+</body>
+</html>

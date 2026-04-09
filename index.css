@@ -1,0 +1,130 @@
+/* File: src/App.css */
+
+.app {
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.5s ease-in-out;
+}
+
+.dark {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
+}
+
+.light {
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+  color: #222;
+}
+
+.hero {
+  text-align: center;
+  padding: 8rem 2rem 4rem;
+  position: relative;
+  z-index: 2;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.cursive {
+  font-family: "Dancing Script", cursive;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #ff6ec4, #7873f5, #4ade80);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: hueRotate 5s infinite linear;
+}
+
+@keyframes hueRotate {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+/* Glitch effect */
+.glitch {
+  position: relative;
+  color: white;
+  text-shadow: 2px 2px #ff00c1, -2px -2px #00fff9;
+  animation: glitch 1s infinite;
+}
+@keyframes glitch {
+  0% { text-shadow: 2px 2px #ff00c1, -2px -2px #00fff9; }
+  50% { text-shadow: -2px -2px #ff00c1, 2px 2px #00fff9; }
+  100% { text-shadow: 2px 2px #ff00c1, -2px -2px #00fff9; }
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+/* Sections */
+.section-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #ff6ec4;
+}
+
+.features ul {
+  list-style: none;
+  padding: 0;
+}
+.features li {
+  margin: 0.5rem 0;
+  font-size: 1.2rem;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 2rem;
+  margin-top: 4rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 12px;
+  background: #ff6ec4;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 3;
+}
+/* Three.js background canvas */
+.three-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* Floating robot canvas */
+.robot-canvas {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  width: 200px;
+  height: 200px;
+  z-index: 5;
+  pointer-events: none; /* so clicks pass through */
+}

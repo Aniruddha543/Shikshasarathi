@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Language Chat • Shikshasarathi</title>
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Playfair Display"', 'serif'],
+            sans: ['Poppins', 'system-ui', 'sans-serif']
+          },
+          colors: {
+            brand: '#111827',
+            accent: '#0077ff'
+          },
+          boxShadow: {
+            neon: "0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Early theme boot -->
+  <script>
+    (() => {
+      try {
+        const s = localStorage.getItem('theme');
+        const p = matchMedia('(prefers-color-scheme: dark)').matches;
+        if (s === 'dark' || (!s && p)) {
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('theme','dark');
+        } else if (s === 'light') {
+          document.documentElement.classList.remove('dark');
+        } else {
+          localStorage.setItem('theme','light');
+        }
+      } catch(_) {}
+    })();
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    .glass { backdrop-filter: blur(12px); background: rgba(255,255,255,.7) }
+    .dark .glass { background: rgba(17,24,39,.7) }
+  </style>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.25em]">SHIKSHASARATHI</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10 space-y-6">
+    <h1 class="font-display text-3xl md:text-4xl">Sign Language Chat</h1>
+
+    <!-- Mode switch + camera controls -->
+    <div class="glass rounded-2xl p-4 border border-black/5 dark:border-white/10">
+      <div class="flex gap-3">
+        <button id="tabASL" class="px-4 py-2 rounded-full bg-accent text-white">ASL</button>
+        <button id="tabISL" class="px-4 py-2 rounded-full border border-black/10 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/10">ISL</button>
+        <div class="ml-auto flex gap-2">
+          <button id="camBtn" class="px-3 py-2 rounded-lg bg-accent text-white">🎥 Enable Camera</button>
+          <button id="stopBtn" class="px-3 py-2 rounded-lg border border-black/10 dark:border-white/20">⏹ Stop</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Webcam -->
+      <section class="glass rounded-2xl p-4 border border-black/5 dark:border-white/10">
+        <img id="cameraFeed" class="w-full rounded-xl bg-black/70 aspect-video object-cover" alt="Camera Feed"/>
+      </section>
+
+      <!-- Chat / Predictions -->
+      <section class="glass rounded-2xl p-4 border border-black/5 dark:border-white/10">
+        <h2 class="font-semibold mb-2">Predicted sentence</h2>
+        <div id="pred" class="min-h-[120px] rounded-xl bg-white/70 dark:bg-white/10 border border-black/10 dark:border-white/10 p-3 text-lg"></div>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button id="speakBtn" class="px-3 py-2 rounded-lg bg-accent text-white">🔊 Speak</button>
+          <button id="clearBtn" class="px-3 py-2 rounded-lg border border-black/10 dark:border-white/20">Clear</button>
+          <button id="demoBtn" class="px-3 py-2 rounded-lg border border-black/10 dark:border-white/20">Insert demo</button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Floating VoiceBot -->
+  <div id="voiceBot" class="fixed bottom-10 right-6 z-[999] w-20 h-20 rounded-full overflow-hidden shadow-neon cursor-pointer">
+    <video autoplay loop muted playsinline class="w-full h-full object-cover rounded-full">
+      <source src="assets/voicebot.mp4" type="video/mp4"/>
+      Your browser does not support video.
+    </video>
+  </div>
+
+  <!-- VoiceBot Chat Window -->
+  <div id="botPanel" class="hidden fixed bottom-28 right-6 z-[1000] w-[350px] h-[450px] rounded-2xl glass shadow-2xl border border-black/5 dark:border-white/10 flex flex-col">
+    <div class="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
+      <div class="font-semibold">AI VoiceBot</div>
+      <button id="botClose" class="w-8 h-8 grid place-items-center rounded-full hover:bg-black/5 dark:hover:bg-white/10">✕</button>
+    </div>
+    <div id="chatBox" class="flex-1 overflow-y-auto p-4 space-y-3 text-sm"></div>
+    <div class="p-3 border-t border-black/5 dark:border-white/10 flex gap-2">
+      <input id="userInput" type="text" placeholder="Type a message..." class="flex-1 px-3 py-2 rounded-lg border border-black/10 dark:border-white/20 bg-white/70 dark:bg-white/10"/>
+      <button id="micBtn" class="px-3 py-2 rounded-lg bg-accent text-white">🎤</button>
+      <button id="sendBtn" class="px-3 py-2 rounded-lg bg-accent text-white">➤</button>
+    </div>
+  </div>
+
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">© 2025 Shikshasarathi</div>
+  </footer>
+
+  <script>
+    const predDiv = document.getElementById("pred");
+    const camBtn = document.getElementById("camBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const clearBtn = document.getElementById("clearBtn");
+    const cameraImg = document.getElementById("cameraFeed");
+    let evtSource = null;
+
+    camBtn.onclick = async () => {
+      if (evtSource) return;
+      try {
+        await fetch("http://127.0.0.1:5000/signapp/start", { method: "POST" });
+        cameraImg.src = "http://127.0.0.1:5000/signapp/video_feed";
+        evtSource = new EventSource("http://127.0.0.1:5000/signapp/stream");
+        evtSource.onmessage = (event) => {
+          try {
+            const clean = event.data.replace(/'/g, '"');
+            const data = JSON.parse(clean);
+            predDiv.innerHTML = `
+              <p><b>Current:</b> ${data.current_letter || "-"}</p>
+              <p><b>Word:</b> ${data.word || ""}</p>
+              <p><b>Sentence:</b> ${data.sentence || ""}</p>
+            `;
+          } catch (err) {
+            console.error("Parse error:", err, event.data);
+          }
+        };
+      } catch (e) {
+        alert("Failed to enable camera. Make sure the backend is running.");
+      }
+    };
+
+    stopBtn.onclick = async () => {
+      if (evtSource) { evtSource.close(); evtSource = null; }
+      await fetch("http://127.0.0.1:5000/signapp/stop", { method: "POST" });
+      cameraImg.removeAttribute("src");
+      predDiv.innerHTML = "";
+    };
+
+    clearBtn.onclick = async () => {
+      await fetch("http://127.0.0.1:5000/signapp/clear", { method: "POST" });
+      predDiv.innerHTML = "";
+    };
+
+    // VoiceBot toggle
+    const voiceBot = document.getElementById('voiceBot');
+    const botPanel = document.getElementById('botPanel');
+    const botClose = document.getElementById('botClose');
+    voiceBot.onclick = () => botPanel.classList.toggle('hidden');
+    botClose.onclick = () => botPanel.classList.add('hidden');
+
+    // Chat system
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+
+    function addMessage(text, sender="user") {
+      const msg = document.createElement("div");
+      msg.className = sender==="user"
+        ? "bg-accent text-white p-2 rounded-lg self-end max-w-[80%]"
+        : "bg-white/70 dark:bg-white/10 p-2 rounded-lg self-start max-w-[80%]";
+      msg.textContent = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function botReply(text) {
+      addMessage(text, "bot");
+      const u = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(u);
+    }
+
+    async function sendToBot(text) {
+      try {
+        const res = await fetch("http://127.0.0.1:5001/voicebot/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+        botReply(data.reply || "⚠️ Bot did not respond.");
+      } catch {
+        botReply("⚠️ Connection error.");
+      }
+    }
+
+    sendBtn.onclick = () => {
+      const text = userInput.value.trim();
+      if(!text) return;
+      addMessage(text,"user");
+      userInput.value="";
+      sendToBot(text);
+    };
+  </script>
+</body>
+</html>

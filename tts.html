@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TTS • Shikshasarathi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{display:['"Playfair Display"','serif'],sans:['Poppins','system-ui','sans-serif']},colors:{brand:'#111827',accent:'#0077ff'},boxShadow:{neon:"0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)"}}}}</script>
+  <script>(()=>{try{const s=localStorage.getItem('theme');const p=matchMedia('(prefers-color-scheme: dark)').matches; if(s==='dark'||(!s&&p)){document.documentElement.classList.add('dark');localStorage.setItem('theme','dark')}else if(s==='light'){document.documentElement.classList.remove('dark')}else{localStorage.setItem('theme','light')}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>.glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.7)}.dark .glass{background:rgba(17,24,39,.7)}</style>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.2em] text-xl">SHIKSHASARATHI</a>
+      <nav class="hidden md:block"><ul class="flex items-center gap-6 text-sm font-medium">
+        <li><a href="stt.html" class="hover:text-accent">STT</a></li>
+        <li><a href="tts.html" class="text-accent">TTS</a></li>
+        <li><a href="http://127.0.0.1:5000" class="hover:text-accent">Sign Language</a></li>
+        <li><a href="voicebot.html" class="hover:text-accent">AI Voicebot</a></li>
+        <li><a href="contents.html" class="hover:text-accent">Contents</a></li>
+        <li><a href="pdf.html" class="hover:text-accent">Pdf-Reader</a></li>
+      </ul></nav>
+      <!-- <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 rounded-full border border-accent text-accent text-sm hover:bg-accent hover:text-white transition">Log In</a>
+        <a href="register.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90 transition">Sign Up</a>
+        <button id="themeToggle" class="ml-2 w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm">🌓</button>
+      </div> -->
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-6 py-10">
+    <h1 class="font-display text-3xl md:text-4xl mb-6">Text‑to‑Speech (TTS)</h1>
+    <section class="glass rounded-2xl p-6 shadow-2xl border border-black/5 dark:border-white/10 space-y-4">
+      <textarea id="text" rows="5" class="w-full rounded-xl p-4 bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10" placeholder="Type something to speak…"></textarea>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div><label class="text-sm">Rate</label><input id="rate" type="range" min="0.5" max="2" step="0.1" value="1" class="w-full"></div>
+        <div><label class="text-sm">Pitch</label><input id="pitch" type="range" min="0" max="2" step="0.1" value="1" class="w-full"></div>
+        <div><label class="text-sm">Voice</label><select id="voice" 
+          class="w-full px-3 py-2 rounded-lg 
+                bg-white/80 dark:bg-[#0B0E14]  <!-- deep blue -->
+                text-black dark:text-white
+                border border-black/10 dark:border-white/20">
+        </select>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button id="speak" class="px-4 py-2 rounded-lg bg-accent text-white">🔊 Speak</button>
+        <button id="stop" class="px-4 py-2 rounded-lg border border-black/10 dark:border-white/20">⏹ Stop</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur"><div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">© 2025 Shikshasarathi</div></footer>
+
+  <script>
+    document.getElementById('themeToggle').onclick=()=>{const h=document.documentElement;const d=h.classList.toggle('dark');localStorage.setItem('theme',d?'dark':'light')};
+    const voiceSel=document.getElementById('voice'); let voices=[];
+    function loadVoices(){voices=speechSynthesis.getVoices(); voiceSel.innerHTML=''; voices.forEach((v,i)=>{const o=document.createElement('option'); o.value=i; o.textContent=`${v.name} (${v.lang})`; voiceSel.appendChild(o)});}
+    loadVoices(); speechSynthesis.onvoiceschanged=loadVoices;
+    const speak=()=>{const t=document.getElementById('text').value||'Hello from Shikshasarathi!'; const u=new SpeechSynthesisUtterance(t); u.rate=parseFloat(document.getElementById('rate').value); u.pitch=parseFloat(document.getElementById('pitch').value); const v=voices[voiceSel.value]; if(v) u.voice=v; speechSynthesis.cancel(); speechSynthesis.speak(u);}
+    document.getElementById('speak').onclick=speak;
+    document.getElementById('stop').onclick=()=>speechSynthesis.cancel();
+  </script>
+</body>
+</html>

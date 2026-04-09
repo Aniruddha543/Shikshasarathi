@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PDF Reader • Shikshasarathi</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config={darkMode:'class',theme:{extend:{
+      fontFamily:{display:['"Playfair Display"','serif'],sans:['Poppins','system-ui','sans-serif']},
+      colors:{brand:'#111827',accent:'#0077ff',navy:'#0a1a2f'},
+      boxShadow:{neon:"0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)"}
+    }}}
+  </script>
+
+  <!-- Early theme -->
+  <script>(()=>{try{const s=localStorage.getItem('theme');const p=matchMedia('(prefers-color-scheme: dark)').matches;
+    if(s==='dark'||(!s&&p)){document.documentElement.classList.add('dark');localStorage.setItem('theme','dark')}
+    else if(s==='light'){document.documentElement.classList.remove('dark')}else{localStorage.setItem('theme','light')}}catch(e){}})();</script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
+  </script>
+
+  <style>
+    .glass{backdrop-filter:blur(12px);background:rgba(255,255,255,.7)}
+    .dark .glass{background:rgba(17,24,39,.7)}
+    li.line{cursor:pointer; margin-left: 1rem; list-style-type: disc;}
+    li.line.active{background:rgba(0,119,255,.14)}
+    li.line:hover{background:rgba(0,0,0,.05)}
+    .dark li.line:hover{background:rgba(255,255,255,.06)}
+  </style>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.2em] text-xl">SHIKSHASARATHI</a>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto px-6 py-10 grid lg:grid-cols-[1.1fr_0.9fr] gap-6">
+    <!-- PDF viewport -->
+    <section class="glass rounded-2xl p-4 border border-black/5 dark:border-white/10">
+      <div class="flex items-start justify-between gap-4 mb-3">
+        <div>
+          <h1 id="docTitle" class="font-display text-2xl leading-tight">PDF</h1>
+          <p id="docMeta" class="text-sm text-black/60 dark:text-white/60">Open a PDF and enable TTS</p>
+        </div>
+        <div>
+          <label class="px-3 py-2 rounded-lg border text-sm cursor-pointer">
+            Load PDF <input id="fileInput" type="file" accept="application/pdf" class="hidden">
+          </label>
+        </div>
+      </div>
+      <div id="pdfView" class="space-y-6"></div>
+    </section>
+
+    <!-- Transcript + TTS -->
+    <section class="glass rounded-2xl p-4 border border-black/5 dark:border-white/10 flex flex-col">
+      <div class="flex items-center justify-between mb-2">
+        <div class="font-semibold">Transcript (click any line to play)</div>
+      </div>
+
+      <!-- Controls -->
+      <div class="rounded-xl border p-3 mb-3 grid gap-3">
+        <div class="flex items-center gap-2">
+          <button id="btnPlay" class="px-3 py-2 rounded-lg bg-accent text-white text-sm">Play</button>
+          <button id="btnPause" class="px-3 py-2 rounded-lg border text-sm">Pause</button>
+          <button id="btnStop" class="px-3 py-2 rounded-lg border text-sm">Stop</button>
+          <button id="btnSave" class="px-3 py-2 rounded-lg bg-navy text-white text-sm">Save Transcript</button>
+        </div>
+      </div>
+
+      <ul id="linesWrap" class="flex-1 overflow-auto rounded-lg border max-h-[70vh] p-3 space-y-1"></ul>
+    </section>
+  </main>
+
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur">
+    <div class="max-w-7xl mx-auto px-6 py-6 text-center text-sm text-black/60 dark:text-white/60">© 2025 Shikshasarathi</div>
+  </footer>
+
+  <script>
+    const pdfView=document.getElementById('pdfView');
+    const linesWrap=document.getElementById('linesWrap');
+    const fileInput=document.getElementById('fileInput');
+    let ALL_LINES=[], CURRENT_IDX=0, playing=false;
+
+    function byYMerge(items){
+      const rows={};
+      for(const it of items){
+        const y=Math.round(it.transform[5]/2)*2;
+        if(!rows[y]) rows[y]=[];
+        rows[y].push(it);
+      }
+      const lines=Object.entries(rows).map(([y,arr])=>{
+        arr.sort((a,b)=>a.transform[4]-b.transform[4]);
+        const txt=arr.map(t=>t.str).join(' ').trim();
+        return {y,text:txt};
+      }).filter(l=>l.text);
+      lines.sort((a,b)=>b.y-a.y);
+      return lines;
+    }
+
+    async function loadPDF(file){
+      pdfView.innerHTML = '';
+      linesWrap.innerHTML = '';
+      ALL_LINES = [];
+      CURRENT_IDX = 0;
+
+      if (!file) return;
+      const arr = await file.arrayBuffer();
+      const PDF_DOC = await pdfjsLib.getDocument({ data: arr }).promise;
+
+      for (let p = 1; p <= PDF_DOC.numPages; p++) {
+        const page = await PDF_DOC.getPage(p);
+        const viewport = page.getViewport({ scale: 1.2 });
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "mb-6 border rounded-lg overflow-hidden shadow";
+        wrapper.appendChild(canvas);
+        pdfView.appendChild(wrapper);
+
+        const tc = await page.getTextContent();
+        const lines = byYMerge(tc.items);
+        lines.forEach(ln => ALL_LINES.push({ page: p, text: ln.text, timestamp: new Date().toLocaleTimeString() }));
+      }
+
+      // ---- Fill transcript as bullet points ----
+      ALL_LINES.forEach((l,i)=>{
+        const li=document.createElement("li");
+        li.className="line px-2 py-1";
+        li.dataset.idx=i;
+        li.textContent=`[P${l.page}] ${l.text}`;
+        li.onclick=()=>{CURRENT_IDX=i; speakFromCurrent();};
+        linesWrap.appendChild(li);
+      });
+    }
+
+    if(fileInput){fileInput.onchange=(e)=>{if(e.target.files.length)loadPDF(e.target.files[0]);};}
+
+    function speakLine(i){
+      if(i<0||i>=ALL_LINES.length) return;
+      const utter=new SpeechSynthesisUtterance(ALL_LINES[i].text);
+      utter.rate=1;
+      utter.onend=()=>{
+        if(playing){ 
+          CURRENT_IDX++;
+          if(CURRENT_IDX<ALL_LINES.length){
+            setTimeout(()=>speakLine(CURRENT_IDX),800);
+          }
+        }
+      };
+      highlightLine(i);
+      speechSynthesis.speak(utter);
+    }
+
+    function speakFromCurrent(){
+      speechSynthesis.cancel();
+      playing=true;
+      speakLine(CURRENT_IDX);
+    }
+
+    function highlightLine(i){
+      document.querySelectorAll("li.line").forEach(el=>el.classList.remove("active"));
+      const el=document.querySelector(`li.line[data-idx="${i}"]`);
+      if(el){el.classList.add("active"); el.scrollIntoView({behavior:"smooth",block:"center"});}
+    }
+
+    btnPlay.onclick=()=>speakFromCurrent();
+    btnPause.onclick=()=>speechSynthesis.pause();
+    btnStop.onclick=()=>{speechSynthesis.cancel();playing=false;};
+
+    // ---- Save Transcript Button ----
+    btnSave.onclick=()=>{
+      if(ALL_LINES.length===0){alert("No transcript available.");return;}
+      let content="📄 Transcript - Shikshasarathi\n\n";
+      ALL_LINES.forEach((l,i)=>{
+        content+=`${i+1}. [${l.timestamp}] [Page ${l.page}] ${l.text}\n`;
+      });
+      const blob=new Blob([content],{type:"text/plain"});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement("a");
+      a.href=url;
+      a.download="Transcript_Shikshasarathi.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

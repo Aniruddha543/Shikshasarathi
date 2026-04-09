@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard • Shikshasarathi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{display:['"Playfair Display"','serif'],sans:['Poppins','system-ui','sans-serif']},colors:{brand:'#111827',accent:'#0077ff'},boxShadow:{neon:"0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)"}}}}</script>
+  <script>(()=>{try{const s=localStorage.getItem('theme');const p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p)){document.documentElement.classList.add('dark');localStorage.setItem('theme','dark')}else if(s==='light'){document.documentElement.classList.remove('dark')}else{localStorage.setItem('theme','light')}}catch(_){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+  <style>.glass{backdrop-filter: blur(12px); background: rgba(255,255,255,.7)}.dark .glass{background: rgba(17,24,39,.7)}</style>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.25em]">SHIKSHASARATHI</a>
+      <nav class="hidden md:block"><ul class="flex items-center gap-6 text-sm">
+        <li><a href="http://127.0.0.1:5000" class="hover:text-accent">Sign Language</a></li>
+        <li><a href="classroom.html" class="hover:text-accent">Classroom</a></li>
+        <li><a href="contents.html" class="hover:text-accent">Contents</a></li>
+      </ul></nav>
+      <!-- <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 rounded-full border border-accent text-accent text-sm hover:bg-accent hover:text-white">Log In</a>
+        <a href="register.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90">Sign Up</a>
+        <button id="themeToggle" class="w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm">🌓</button>
+      </div> -->
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10 space-y-6">
+    <h1 class="font-display text-3xl md:text-4xl">Dashboard & Feedback</h1>
+
+    <!-- Activity -->
+    <section class="glass rounded-2xl p-5 border border-black/5 dark:border-white/10">
+      <div class="flex items-center justify-between">
+        <h2 class="font-semibold">Your activity</h2>
+        <div class="flex gap-2"><button id="logVisit" class="px-3 py-2 rounded-lg border border-black/10 dark:border-white/20">Add a test log</button><button id="clearLogs" class="px-3 py-2 rounded-lg border border-black/10 dark:border-white/20">Clear</button></div>
+      </div>
+      <ul id="logs" class="mt-3 space-y-2"></ul>
+    </section>
+
+    <!-- Feedback -->
+    <section class="glass rounded-2xl p-5 border border-black/5 dark:border-white/10">
+      <h2 class="font-semibold mb-3">Share your experience</h2>
+      <div class="flex items-center gap-2 mb-3">
+        <span class="text-sm mr-2">Rating:</span>
+        <div id="stars" class="flex gap-1 text-2xl cursor-pointer">
+          <span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+        </div>
+      </div>
+      <textarea id="fbText" rows="4" class="w-full rounded-xl p-3 bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10" placeholder="Tell us what worked well and what we should improve…"></textarea>
+      <div class="mt-3"><button id="submitFb" class="px-4 py-2 rounded-lg bg-accent text-white">Submit</button></div>
+      <div class="mt-6">
+        <h3 class="font-semibold mb-2">Previous feedback</h3>
+        <ul id="fbList" class="space-y-3"></ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bot -->
+  <button id="botFab" class="fixed bottom-6 right-6 z-[60] w-14 h-14 rounded-full bg-accent text-white shadow-neon grid place-items-center hover:scale-105 transition">🎤</button>
+  <div id="botPanel" class="hidden fixed bottom-24 right-6 z-[60] w-[320px] rounded-2xl glass shadow-2xl border border-black/5 dark:border-white/10">
+    <div class="p-4 border-b border-black/5 dark:border-white/10 flex items-center justify-between">
+      <div class="font-semibold">AI Voicebot</div><button id="botClose" class="w-8 h-8 grid place-items-center rounded-full hover:bg-black/5 dark:hover:bg-white/10">✕</button>
+    </div>
+    <div class="p-4 space-y-3">
+      <a href="sign-chat.html" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20">Sign Chat</a>
+      <a href="classroom.html" class="px-3 py-1.5 rounded-full text-sm border border-black/10 dark:border-white/20">Classroom</a>
+    </div>
+  </div>
+
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur"><div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">© 2025 Shikshasarathi</div></footer>
+
+  <script>
+    // Theme + bot
+    themeToggle.onclick=()=>{const d=document.documentElement.classList.toggle('dark');localStorage.setItem('theme',d?'dark':'light')};
+    botFab.onclick=()=>botPanel.classList.toggle('hidden'); botClose.onclick=()=>botPanel.classList.add('hidden');
+
+    // Simple activity logs in localStorage
+    const key='ss_logs'; const list=document.getElementById('logs');
+    function getLogs(){return JSON.parse(localStorage.getItem(key)||'[]')}
+    function setLogs(v){localStorage.setItem(key,JSON.stringify(v))}
+    function render(){ list.innerHTML=''; getLogs().slice().reverse().forEach(x=>{const li=document.createElement('li'); li.className='text-sm text-black/70 dark:text-white/70'; li.textContent=`${new Date(x.t).toLocaleString()} — ${x.msg}`; list.appendChild(li); }) }
+    function push(msg){ const a=getLogs(); a.push({t:Date.now(), msg}); setLogs(a); render() }
+    render(); push('Visited dashboard');
+
+    logVisit.onclick=()=>push('User clicked "Add a test log"');
+    clearLogs.onclick=()=>{ setLogs([]); render() };
+
+    // Feedback store
+    const fkey='ss_feedback'; const stars=document.querySelectorAll('#stars span'); let rating=0;
+    stars.forEach((s,i)=>{ s.onclick=()=>{ rating=i+1; stars.forEach((k,idx)=>k.textContent = idx<rating ? '★':'☆') }});
+    submitFb.onclick=()=>{ if(!rating && !fbText.value.trim()) return alert('Please add a rating or a comment.');
+      const all=JSON.parse(localStorage.getItem(fkey)||'[]'); all.push({t:Date.now(),rating, text:fbText.value.trim()}); localStorage.setItem(fkey,JSON.stringify(all)); fbText.value=''; rating=0; stars.forEach(k=>k.textContent='☆'); renderFb(); alert('Thanks for your feedback!') };
+    function renderFb(){ const all=JSON.parse(localStorage.getItem(fkey)||'[]'); fbList.innerHTML=''; all.slice().reverse().forEach(f=>{ const li=document.createElement('li'); li.className='glass p-3 rounded-xl border border-black/5 dark:border-white/10'; li.innerHTML=`<div class="text-sm">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</div><div class="text-sm text-black/70 dark:text-white/70">${f.text||'<i>No comment</i>'}</div><div class="text-xs text-black/50 dark:text-white/50 mt-1">${new Date(f.t).toLocaleString()}</div>`; fbList.appendChild(li); }) }
+    renderFb();
+  </script>
+</body>
+</html>
+

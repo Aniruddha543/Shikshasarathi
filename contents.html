@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contents • Shikshasarathi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{fontFamily:{display:['"Playfair Display"','serif'],sans:['Poppins','system-ui','sans-serif']},colors:{brand:'#111827',accent:'#0077ff'},boxShadow:{neon:"0 0 0 4px rgba(0,119,255,.12), 0 10px 30px rgba(0,0,0,.25)"}}}}</script>
+  <script>(()=>{try{const s=localStorage.getItem('theme');const p=matchMedia('(prefers-color-scheme: dark)').matches; if(s==='dark'||(!s&&p)){document.documentElement.classList.add('dark');localStorage.setItem('theme','dark')}else if(s==='light'){document.documentElement.classList.remove('dark')}else{localStorage.setItem('theme','light')}}catch(e){}})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+  <style>.glass{backdrop-filter:blur(10px);background:rgba(255,255,255,.6)}.dark .glass{background:rgba(17,24,39,.6)}</style>
+</head>
+<body class="bg-[#f5f6fa] text-brand dark:bg-[#0b0e14] dark:text-white font-sans">
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-[#0b0e14]/70 backdrop-blur border-b border-black/5 dark:border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="font-display tracking-[0.2em] text-xl">SHIKSHASARATHI</a>
+      <nav class="hidden md:block"><ul class="flex items-center gap-6 text-sm font-medium">
+        <li><a href="stt.html" class="hover:text-accent">STT</a></li>
+        <li><a href="tts.html" class="hover:text-accent">TTS</a></li>
+        <li><a href="http://127.0.0.1:5000" class="hover:text-accent">Sign Language</a></li>
+        <li><a href="voicebot.html" class="hover:text-accent">AI Voicebot</a></li>
+        <li><a href="contents.html" class="text-accent">Contents</a></li>
+        <li><a href="pdf.html" class="text-accent">Pdf-Reader</a></li>
+      </ul></nav>
+      <!-- <div class="flex items-center gap-3">
+        <a href="login.html" class="px-4 py-2 rounded-full border border-accent text-accent text-sm hover:bg-accent hover:text-white transition">Log In</a>
+        <a href="register.html" class="px-4 py-2 rounded-full bg-accent text-white text-sm hover:opacity-90 transition">Sign Up</a>
+        <button id="themeToggle" class="ml-2 w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm">🌓</button>
+      </div> -->
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10">
+    <h1 class="font-display text-3xl md:text-4xl mb-6">Contents</h1>
+
+    <!-- Filter/Search -->
+    <div class="glass rounded-2xl p-4 shadow-2xl border border-black/5 dark:border-white/10 mb-6 flex flex-col md:flex-row gap-3">
+      <input id="search" class="flex-1 px-4 py-2 rounded-lg bg-white/70 dark:bg-white/10 border border-black/10 dark:border-white/10" placeholder="Search notes, videos, resources…">
+      <select id="type" class="px-3 py-2 rounded-lg bg-white/70 dark:bg-white/10 border border-black/10 dark:border-white/10">
+        <option value="all">All</option><option value="notes">Notes</option><option value="video">Video</option><option value="link">Link</option>
+      </select>
+    </div>
+
+    <!-- Cards -->
+    <div id="grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- cards injected by JS -->
+    </div>
+  </main>
+
+  <footer class="border-t border-black/5 dark:border-white/10 bg-white/60 dark:bg-[#0b0e14]/60 backdrop-blur"><div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-black/60 dark:text-white/60">© 2025 Shikshasarathi</div></footer>
+
+  <script>
+    document.getElementById('themeToggle').onclick=()=>{const h=document.documentElement;const d=h.classList.toggle('dark');localStorage.setItem('theme',d?'dark':'light')};
+
+    const data=[
+      {id:1,type:'notes',title:'Physics – Kinematics Notes',desc:'Accessible PDF with dyslexia-friendly fonts.',img:'assets/img1.jpeg',href:'#'},
+      {id:2,type:'video',title:'Sign Language – Basics',desc:'Intro lesson with captions.',img:'assets/img2.jpeg',href:'#'},
+      {id:3,type:'link',title:'TTS Best Practices',desc:'Guide for natural speech output.',img:'assets/img3.png',href:'#'},
+      {id:4,type:'video',title:'AI Voicebot Demo',desc:'Short walkthrough.',img:'assets/img1.jpeg',href:'#'},
+      {id:5,type:'notes',title:'Hindi Grammar Notes',desc:'Bilingual content.',img:'assets/img2.jpeg',href:'#'},
+      {id:6,type:'link',title:'STT Punctuation Models',desc:'Research roundup.',img:'assets/img3.png',href:'#'},
+    ];
+
+    const grid=document.getElementById('grid');
+    const search=document.getElementById('search');
+    const type=document.getElementById('type');
+
+    function render(){
+      const q=search.value.toLowerCase(); const t=type.value;
+      grid.innerHTML='';
+      data.filter(d=>{
+        const okType = t==='all' || d.type===t;
+        const okText = d.title.toLowerCase().includes(q) || d.desc.toLowerCase().includes(q);
+        return okType && okText;
+      }).forEach(d=>{
+        const card=document.createElement('a');
+        card.href=d.href;
+        card.className='glass rounded-2xl overflow-hidden shadow-2xl border border-black/5 dark:border-white/10 block hover:scale-[1.01] transition';
+        card.innerHTML=`
+          <img src="${d.img}" alt="${d.title}" class="w-full h-40 object-cover">
+          <div class="p-4">
+            <span class="px-2 py-0.5 text-xs rounded-full border border-black/10 dark:border-white/20">${d.type}</span>
+            <h3 class="mt-2 font-semibold">${d.title}</h3>
+            <p class="text-sm text-black/70 dark:text-white/70 mt-1">${d.desc}</p>
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+    render(); search.oninput=render; type.onchange=render;
+  </script>
+</body>
+</html>

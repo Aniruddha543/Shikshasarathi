@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register • Shikshasarathi</title>
+
+  <!-- Tailwind (for consistent styling with the rest of your site) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode:'class', theme:{ extend:{
+      fontFamily:{ display:['"Playfair Display"','serif'], sans:['Poppins','system-ui','sans-serif'] },
+      colors:{ brand:'#111827', accent:'#0077ff' }
+    }}}
+  </script>
+  <script>(()=>{try{const s=localStorage.getItem('theme');const p=matchMedia('(prefers-color-scheme: dark)').matches;
+    if(s==='dark'||(!s&&p)){document.documentElement.classList.add('dark');localStorage.setItem('theme','dark')}
+    else if(s==='light'){document.documentElement.classList.remove('dark')}else{localStorage.setItem('theme','light')}}catch(_){}})();</script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    .glass{backdrop-filter: blur(12px); background: rgba(255,255,255,.75)}
+    .dark .glass{background: rgba(17,24,39,.75)}
+  </style>
+</head>
+<body class="bg-[#f5f6fa] dark:bg-[#0b0e14] text-brand dark:text-white font-sans min-h-screen flex items-center justify-center px-4">
+
+  <a href="landing.html" class="absolute top-4 left-4 text-sm opacity-70 hover:opacity-100">← Back</a>
+  <button id="themeToggle" class="absolute top-4 right-4 w-9 h-9 rounded-full border border-black/10 dark:border-white/20 grid place-items-center text-sm">🌓</button>
+
+  <main class="glass w-full max-w-lg rounded-3xl shadow-2xl border border-black/5 dark:border-white/10 p-8">
+    <h1 class="font-display text-3xl text-center mb-2">Create your account</h1>
+    <p class="text-center text-black/60 dark:text-white/60 mb-6">Join Shikshasarathi • Barrier‑Free Learning for All</p>
+
+    <!-- Success / error banners -->
+    <div id="banner" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
+
+    <form id="regForm" class="space-y-4">
+      <div>
+        <label class="block text-sm mb-1">Full Name</label>
+        <input id="name" type="text" required placeholder="e.g., Aisha Verma"
+               class="w-full px-4 py-3 rounded-xl bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10 outline-none">
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm mb-1">Email</label>
+          <input id="email" type="email" required placeholder="you@example.com"
+                 class="w-full px-4 py-3 rounded-xl bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10 outline-none">
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Mobile</label>
+          <input id="phone" type="tel" inputmode="numeric" pattern="[0-9]{10}" placeholder="10‑digit number"
+                 class="w-full px-4 py-3 rounded-xl bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10 outline-none">
+        </div>
+      </div>
+
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm mb-1">Password</label>
+          <input id="password" type="password" minlength="6" required placeholder="Min 6 characters"
+                 class="w-full px-4 py-3 rounded-xl bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10 outline-none">
+        </div>
+        <div>
+          <label class="block text-sm mb-1">Confirm Password</label>
+          <input id="confirm" type="password" minlength="6" required placeholder="Retype password"
+                 class="w-full px-4 py-3 rounded-xl bg-white/80 dark:bg-white/10 border border-black/10 dark:border-white/10 outline-none">
+        </div>
+      </div>
+
+      <button id="submitBtn"
+              class="w-full mt-2 px-4 py-3 rounded-xl bg-accent text-white font-medium hover:opacity-95 transition">
+        Create Account
+      </button>
+
+      <p class="text-center text-sm mt-2">
+        Already have an account?
+        <a class="text-accent hover:underline" href="login.html">Log in</a>
+      </p>
+    </form>
+
+    <p class="text-[12px] text-black/50 dark:text-white/50 mt-6">
+      By creating an account you agree to our Terms and Privacy Policy.
+    </p>
+  </main>
+
+  <!-- Firebase SDKs (modular v9 CDN) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    // Optional Firestore (only if you want to store phone/name separately)
+    // import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // 1) INSERT YOUR CONFIG HERE ⬇️
+    const firebaseConfig = {
+      apiKey: "AIzaSyAFbOYSeIajkD1K5fep-CDXMD8FBfnJgcY",
+      authDomain: "shiksha-sarathi-4a4c8.firebaseapp.com",
+      projectId: "shiksha-sarathi-4a4c8",
+      storageBucket: "shiksha-sarathi-4a4c8.firebasestorage.app",
+      messagingSenderId: "939995805840",
+      appId: "1:939995805840:web:9605acc4d7e4988debc015",
+      measurementId: "G-8WSNFC0GKC"
+    };
+
+    // 2) Init
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    // const db   = getFirestore(app); // if using Firestore
+
+    // UI helpers
+    const banner = document.getElementById('banner');
+    function showBanner(msg, ok=false){
+      banner.classList.remove('hidden');
+      banner.textContent = msg;
+      banner.className = `mb-4 p-3 rounded-lg text-sm ${ok ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200'}`;
+    }
+
+    // Basic validation + signup
+    const form = document.getElementById('regForm');
+    const nameEl = document.getElementById('name');
+    const emailEl = document.getElementById('email');
+    const phoneEl = document.getElementById('phone');
+    const passEl = document.getElementById('password');
+    const confEl = document.getElementById('confirm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      banner.classList.add('hidden');
+
+      const name = nameEl.value.trim();
+      const email = emailEl.value.trim();
+      const phone = phoneEl.value.trim();
+      const pass = passEl.value;
+      const conf = confEl.value;
+
+      if (!name) return showBanner('Please enter your full name.');
+      if (pass !== conf) return showBanner('Passwords do not match.');
+      if (pass.length < 6) return showBanner('Password must be at least 6 characters.');
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating account…';
+
+      try {
+        // Create user
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+
+        // Set display name
+        await updateProfile(cred.user, { displayName: name });
+
+        // OPTIONAL: store phone or other profile in Firestore
+        // await setDoc(doc(db, "users", cred.user.uid), {
+        //   name, email, phone, createdAt: Date.now()
+        // });
+
+        showBanner('Registration successful. Redirecting to login…', true);
+
+        // Redirect to login with flag
+        setTimeout(()=>{ window.location.href = 'login.html?registered=1'; }, 800);
+
+      } catch (err) {
+        // Friendly error messages
+        const map = {
+          'auth/email-already-in-use': 'This email is already registered.',
+          'auth/invalid-email': 'Please enter a valid email address.',
+          'auth/weak-password': 'Password is too weak (min 6 characters).',
+          'auth/network-request-failed': 'Network error. Check your connection.'
+        };
+        showBanner(map[err.code] || ('Error: ' + err.message));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+
+    // Theme toggle
+    document.getElementById('themeToggle').onclick = () => {
+      const d = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', d ? 'dark' : 'light');
+    };
+  </script>
+</body>
+</html>
