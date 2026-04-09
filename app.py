@@ -4,8 +4,6 @@ import json
 from flask_cors import CORS   # 👈 allow frontend to call backend
 
 # Gemini API Setup
-API_KEY = "AIzaSyDoErOe37jYWUKMdtfGm353BEEYgts6t9M"
-API_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={API_KEY}"
 
 app = Flask(__name__)
 CORS(app)   # 👈 allow cross-origin (your HTML is served separately)
